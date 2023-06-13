@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
-import 'main.dart';
 
 class MonthlyExpensesChart extends StatelessWidget {
   final List<ExpenseData> data;
 
-  MonthlyExpensesChart({required this.data});
+  const MonthlyExpensesChart({super.key, required this.data});
 
   @override
   Widget build(BuildContext context) {
@@ -22,18 +21,18 @@ class MonthlyExpensesChart extends StatelessWidget {
 
     return Container(
       height: 200,
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       child: charts.BarChart(
         series,
         animate: true,
-        domainAxis: charts.OrdinalAxisSpec(
+        domainAxis: const charts.OrdinalAxisSpec(
           renderSpec: charts.SmallTickRendererSpec(
             labelStyle: charts.TextStyleSpec(
               fontSize: 12,
             ),
           ),
         ),
-        primaryMeasureAxis: charts.NumericAxisSpec(
+        primaryMeasureAxis: const charts.NumericAxisSpec(
           renderSpec: charts.GridlineRendererSpec(
             labelStyle: charts.TextStyleSpec(
               fontSize: 12,

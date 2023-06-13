@@ -1,48 +1,65 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:tests/preferences.dart';
+import 'package:tests/theme/theme_constants.dart';
+import 'package:tests/theme/theme_manager.dart';
 
 void main() {
 
-  runApp(FinancialPlannerApp());
+  runApp(const FinancialPlannerApp());
 }
+ThemeManager _themeManager = ThemeManager();
 
 class FinancialPlannerApp extends StatelessWidget {
+  const FinancialPlannerApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Financial Planner',
-      theme: ThemeData(
-        brightness: Brightness.light,
-        primarySwatch: Colors.blue,
-      ),
-      darkTheme: ThemeData(
-        brightness: Brightness.dark,
-        primarySwatch: Colors.blue,
-      ),
-      home: HomePage(),
+      theme: lightTheme,
+      darkTheme: darkTheme,
+      themeMode: _themeManager.themeMode,
+      home: const HomePage(),
     );
   }
 }
 
 class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
   @override
-  _HomePageState createState() => _HomePageState();
+  HomePageState createState() => HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class HomePageState extends State<HomePage> {
   List<Account> accounts = [];
 
   @override
   void initState() {
     super.initState();
+    _themeManager.addListener(themeListener);
     loadAccounts();
-  }
 
+  }
+  @override
+  void dispose() {
+    _themeManager.removeListener(themeListener);
+    super.dispose();
+  }
+  themeListener(){
+    if(mounted){
+      setState(() {
+
+      });
+    }
+  }
   Future<void> loadAccounts() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final accountList = prefs.getStringList('accounts') ?? [];
@@ -82,58 +99,91 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Financial Planner'),
-      ),
-      body: ListView.builder(
-        itemCount: accounts.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(accounts[index].name),
-            subtitle: Text('Balance: \$${accounts[index].balance.toStringAsFixed(2)}'),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AccountDetailPage(
-                    account: accounts[index],
-                    updateAccountBalance: updateAccountBalance,
-                  ),
-                ),
-              );
-            },
-            trailing: IconButton(
-              icon: Icon(Icons.delete),
+        centerTitle: true,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        title: const Text(
+          'Financial Planner',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.black54,
+          ),
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 16.0, top: 3, bottom: 7),
+            child: NeumorphicButton(
               onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: Text('Delete Account'),
-                      content: Text('Are you sure you want to delete this account?'),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: Text('Cancel'),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            deleteAccount(accounts[index]);
-                            Navigator.of(context).pop();
-                          },
-                          child: Text('Delete'),
-                        ),
-                      ],
-                    );
-                  },
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Settings()),
                 );
               },
+              style: NeumorphicStyle(
+                shape: NeumorphicShape.convex,
+                boxShape: NeumorphicBoxShape.circle(),
+                depth: 6,
+                intensity: 0.9,
+                color: Colors.grey.shade100,
+              ),
+              child: Icon(Icons.settings, color: Colors.black38),
+            ),
+          ),
+        ],
+      ),
+      body: ListView.builder(
+        physics: const BouncingScrollPhysics(),
+        itemCount: accounts.length,
+        itemBuilder: (context, index) {
+          return GestureDetector(
+            onLongPress: () {
+              AwesomeDialog(
+                btnOkText: "Delete",
+              btnOkColor: Colors.lightGreen,
+              btnCancelColor: Colors.grey,
+              context: context,
+              animType: AnimType.bottomSlide,
+              dialogType: DialogType.info,
+              title: 'Delete Account',
+              headerAnimationLoop: false,
+              desc: 'Are you sure you want to delete this account?',
+              btnCancelOnPress: () {},
+              btnOkOnPress: () {
+                deleteAccount(accounts[index]);
+              },
+            ).show();
+
+            },
+            child: Neumorphic(
+              margin: const EdgeInsets.all(16),
+              style: NeumorphicStyle(
+                depth: 7,
+                intensity: 1,
+                shadowDarkColor: Colors.grey.shade300,
+                color: Colors.grey.shade100,
+                boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(15)),
+              ),
+              child: ListTile(
+                title: Text(accounts[index].name),
+                subtitle: Text('Balance: \$${accounts[index].balance.toStringAsFixed(2)}'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AccountDetailPage(
+                        account: accounts[index],
+                        updateAccountBalance: updateAccountBalance,
+                      ),
+                    ),
+                  );
+                },
+              ),
             ),
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: NeumorphicButton(
         onPressed: () {
           showDialog(
             context: context,
@@ -144,7 +194,14 @@ class _HomePageState extends State<HomePage> {
             },
           );
         },
-        child: Icon(Icons.add),
+        style: NeumorphicStyle(
+          depth: 8,
+          intensity: 1,
+          shadowDarkColor: Colors.grey.shade400,
+          color: Colors.grey.shade100,
+          boxShape: const NeumorphicBoxShape.circle(),
+        ),
+        child: const Icon(Icons.add,size:60,color: Colors.black12,),
       ),
     );
   }
@@ -178,13 +235,13 @@ class Account {
 class AddAccountDialog extends StatefulWidget {
   final Function addAccount;
 
-  AddAccountDialog({required this.addAccount});
+  const AddAccountDialog({super.key, required this.addAccount});
 
   @override
-  _AddAccountDialogState createState() => _AddAccountDialogState();
+  AddAccountDialogState createState() => AddAccountDialogState();
 }
 
-class _AddAccountDialogState extends State<AddAccountDialog> {
+class AddAccountDialogState extends State<AddAccountDialog> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _balanceController = TextEditingController();
@@ -214,52 +271,123 @@ class _AddAccountDialogState extends State<AddAccountDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('Add Account'),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
+      ),
+      title: const Text(
+        'Add Account',
+      ),
+      titleTextStyle: TextStyle(
+        color: Colors.black54,
+        fontSize: 20,
+      ),
       content: Form(
         key: _formKey,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            TextFormField(
-              controller: _nameController,
-              decoration: InputDecoration(labelText: 'Name'),
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return 'Please enter a name';
-                }
-                return null;
-              },
+            Neumorphic(
+              style: NeumorphicStyle(
+                depth: -5,
+                intensity: 0.8,
+                color: Colors.grey.shade100,
+                boxShape: NeumorphicBoxShape.roundRect(
+                  BorderRadius.circular(12),
+                ),
+              ),
+              child: TextFormField(
+                controller: _nameController,
+                decoration: InputDecoration(
+                  labelText: 'Name',
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.fromLTRB(12, 16, 12, 16),
+                ),
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Please enter a name';
+                  }
+                  return null;
+                },
+              ),
             ),
-            TextFormField(
-              controller: _balanceController,
-              decoration: InputDecoration(labelText: 'Balance'),
-              keyboardType: TextInputType.number,
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return 'Please enter a balance';
-                }
-                if (double.tryParse(value) == null) {
-                  return 'Please enter a valid number';
-                }
-                return null;
-              },
+            SizedBox(height: 16),
+            Neumorphic(
+              style: NeumorphicStyle(
+                depth: -5,
+                intensity: 0.8,
+                color: Colors.grey.shade100,
+                boxShape: NeumorphicBoxShape.roundRect(
+                  BorderRadius.circular(12),
+                ),
+              ),
+              child: TextFormField(
+                controller: _balanceController,
+                decoration: InputDecoration(
+                  labelText: 'Balance',
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.fromLTRB(12, 16, 12, 16),
+                ),
+                keyboardType: TextInputType.number,
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Please enter a balance';
+                  }
+                  if (double.tryParse(value) == null) {
+                    return 'Please enter a valid number';
+                  }
+                  return null;
+                },
+              ),
             ),
           ],
         ),
       ),
       actions: [
-        TextButton(
+        NeumorphicButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: Text('Cancel'),
+          style: NeumorphicStyle(
+            shape: NeumorphicShape.concave,
+            intensity: 0.9,
+            depth: 9,
+            boxShape: NeumorphicBoxShape.roundRect(
+              BorderRadius.circular(12),
+            ),
+            color: Colors.grey.shade100,
+          ),
+          padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+          child: Text(
+            'Cancel',
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ),
-        TextButton(
+        NeumorphicButton(
           onPressed: _submitForm,
-          child: Text('Add'),
+          style: NeumorphicStyle(
+            shape: NeumorphicShape.concave,
+            intensity: 0.8,
+            depth: 9,
+            boxShape: NeumorphicBoxShape.roundRect(
+              BorderRadius.circular(12),
+            ),
+            color: Colors.grey.shade100,
+          ),
+          padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+          child: Text(
+            'Add',
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ),
       ],
     );
+
   }
 }
 
@@ -268,13 +396,13 @@ class AccountDetailPage extends StatefulWidget {
   final Account account;
   final Function(Account) updateAccountBalance;
 
-  AccountDetailPage({required this.account, required this.updateAccountBalance});
+  const AccountDetailPage({super.key, required this.account, required this.updateAccountBalance});
 
   @override
-  _AccountDetailPageState createState() => _AccountDetailPageState();
+  AccountDetailPageState createState() => AccountDetailPageState();
 }
 
-class _AccountDetailPageState extends State<AccountDetailPage> with SingleTickerProviderStateMixin {
+class AccountDetailPageState extends State<AccountDetailPage> with SingleTickerProviderStateMixin {
   late TabController _tabController;
   List<Transaction> transactions = [];
   List<Transaction> incomeTransactions = [];
@@ -363,14 +491,49 @@ class _AccountDetailPageState extends State<AccountDetailPage> with SingleTicker
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.account.name),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        toolbarHeight: 80,
+        title: Text(
+          widget.account.name,
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.black54,
+          ),
+        ),
+        centerTitle: true,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(15),
+            bottomRight: Radius.circular(15),
+          ),
+        ),
+        shadowColor: Colors.grey.shade300,
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 16.0),
+          child: NeumorphicButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            style: NeumorphicStyle(
+              shape: NeumorphicShape.flat,
+              boxShape: NeumorphicBoxShape.circle(),
+              depth: 6,
+              intensity: 0.9,
+              color: Colors.grey.shade100,
+            ),
+            padding: EdgeInsets.all(10),
+            child: Icon(Icons.arrow_back, color: Colors.black38),
+          ),
+        ),
       ),
       body: Column(
         children: [
           TabBar(
             controller: _tabController,
             labelColor: Colors.black,
-            tabs: [
+            tabs: const [
               Tab(text: 'Einnahmen'),
               Tab(text: 'Ausgaben'),
             ],
@@ -391,12 +554,24 @@ class _AccountDetailPageState extends State<AccountDetailPage> with SingleTicker
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: NeumorphicButton(
         onPressed: () => showDialog(
           context: context,
           builder: (_) => AddTransactionDialog(addTransaction: addTransaction),
         ),
-        child: Icon(Icons.add),
+        style: NeumorphicStyle(
+          depth: 8,
+          intensity: 1,
+          shadowDarkColor: Colors.grey.shade400,
+          color: Colors.grey.shade100,
+          boxShape: NeumorphicBoxShape.circle(),
+        ),
+        padding: EdgeInsets.all(16),
+        child: Icon(
+          Icons.add,
+          size: 40,
+          color: Colors.black12,
+        ),
       ),
     );
   }
@@ -425,11 +600,11 @@ class _AccountDetailPageState extends State<AccountDetailPage> with SingleTicker
 
   Widget _buildExpenseChart() {
     return Padding(
-      padding: EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(8.0),
       child: Card(
         elevation: 4.0,
         child: Padding(
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           child: MonthlyExpensesChart(data: expenseData),
         ),
       ),
@@ -484,13 +659,13 @@ class Transaction {
 class AddTransactionDialog extends StatefulWidget {
   final Function addTransaction;
 
-  AddTransactionDialog({required this.addTransaction});
+  const AddTransactionDialog({super.key, required this.addTransaction});
 
   @override
-  _AddTransactionDialogState createState() => _AddTransactionDialogState();
+  AddTransactionDialogState createState() => AddTransactionDialogState();
 }
 
-class _AddTransactionDialogState extends State<AddTransactionDialog> {
+class AddTransactionDialogState extends State<AddTransactionDialog> {
   final _formKey = GlobalKey<FormState>();
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
@@ -523,15 +698,38 @@ class _AddTransactionDialogState extends State<AddTransactionDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('Add Transaction'),
-      content: Form(
-        key: _formKey,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextFormField(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
+      ),
+      title: Text(
+        'Add Transaction',
+        style: TextStyle(
+          fontSize: 20,
+          color: Colors.black54,
+        ),
+      ),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Neumorphic(
+            style: NeumorphicStyle(
+              depth: -5,
+              intensity: 0.8,
+              color: Colors.grey.shade100,
+              boxShape: NeumorphicBoxShape.roundRect(
+                BorderRadius.circular(12),
+              ),
+            ),
+            child: TextFormField(
               controller: _titleController,
-              decoration: InputDecoration(labelText: 'Title'),
+              decoration: InputDecoration(
+                labelText: 'Title',
+                border: InputBorder.none,
+                contentPadding: EdgeInsets.symmetric(
+                  vertical: 12,
+                  horizontal: 16,
+                ),
+              ),
               validator: (value) {
                 if (value!.isEmpty) {
                   return 'Please enter a title';
@@ -539,9 +737,27 @@ class _AddTransactionDialogState extends State<AddTransactionDialog> {
                 return null;
               },
             ),
-            TextFormField(
+          ),
+          SizedBox(height: 16),
+          Neumorphic(
+            style: NeumorphicStyle(
+              depth: -5,
+              intensity: 0.8,
+              color: Colors.grey.shade100,
+              boxShape: NeumorphicBoxShape.roundRect(
+                BorderRadius.circular(12),
+              ),
+            ),
+            child: TextFormField(
               controller: _amountController,
-              decoration: InputDecoration(labelText: 'Amount'),
+              decoration: InputDecoration(
+                labelText: 'Amount',
+                border: InputBorder.none,
+                contentPadding: EdgeInsets.symmetric(
+                  vertical: 12,
+                  horizontal: 16,
+                ),
+              ),
               keyboardType: TextInputType.number,
               validator: (value) {
                 if (value!.isEmpty) {
@@ -553,35 +769,71 @@ class _AddTransactionDialogState extends State<AddTransactionDialog> {
                 return null;
               },
             ),
-            Row(
-              children: [
-                Checkbox(
-                  value: _isExpense,
-                  onChanged: (value) {
-                    setState(() {
-                      _isExpense = value!;
-                    });
-                  },
-                ),
-                Text('Expense'),
-              ],
-            ),
-          ],
-        ),
+          ),
+          SizedBox(height: 16),
+          Row(
+            children: [
+              NeumorphicCheckbox(
+                style: NeumorphicCheckboxStyle(selectedColor: Colors.lightGreen, disabledColor: Colors.grey.shade200,selectedDepth: -10, unselectedDepth: 8),
+                value: _isExpense,
+                onChanged: (value) {
+                  setState(() {
+                    _isExpense = value!;
+                  });
+                },
+              ),
+              SizedBox(width: 8),
+              Text('Expense', style: TextStyle(color: Colors.black87),),
+            ],
+          ),
+        ],
       ),
       actions: [
-        TextButton(
+        NeumorphicButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: Text('Cancel'),
+          style: NeumorphicStyle(
+            shape: NeumorphicShape.concave,
+            intensity: 0.8,
+            depth: 9,
+            boxShape: NeumorphicBoxShape.roundRect(
+              BorderRadius.circular(12),
+            ),
+            color: Colors.grey.shade100,
+          ),
+          padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+          child: Text(
+            'Cancel',
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ),
-        TextButton(
+        NeumorphicButton(
           onPressed: _submitForm,
-          child: Text('Add'),
+          style: NeumorphicStyle(
+            shape: NeumorphicShape.concave,
+            intensity: 0.8,
+            depth: 9,
+            boxShape: NeumorphicBoxShape.roundRect(
+              BorderRadius.circular(12),
+            ),
+            color: Colors.grey.shade100,
+          ),
+          padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+          child: Text(
+            'Add',
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ),
       ],
     );
+
   }
 }
 
@@ -589,11 +841,11 @@ class _AddTransactionDialogState extends State<AddTransactionDialog> {
 class MonthlyExpensesChart extends StatelessWidget {
   final List<ExpenseData> data;
 
-  MonthlyExpensesChart({required this.data});
+  const MonthlyExpensesChart({super.key, required this.data});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 300,
       child: SfCartesianChart(
         primaryXAxis: CategoryAxis(),
