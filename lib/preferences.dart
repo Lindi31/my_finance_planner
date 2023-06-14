@@ -146,9 +146,6 @@ class SettingsState extends State<Settings> {
                       case "English": context.setLocale(Locale('en', 'US')); break;
                       case "Deutsch": context.setLocale(Locale('de', 'DE')); break;
                     }
-
-                    // Hier kannst du die Spracheinstellung entsprechend anpassen
-                    // z.B. mit einer Funktion, die die App-Sprache ändert.
                   });
                 },
                 items: _languages.map<DropdownMenuItem<String>>((String value) {
