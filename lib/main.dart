@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tests/preferences.dart';
+import 'package:tests/saving_tips.dart';
 import 'package:tests/theme/theme_constants.dart';
 import 'package:tests/theme/theme_manager.dart';
 import "package:easy_localization/easy_localization.dart";
@@ -507,6 +508,20 @@ class AccountDetailPageState extends State<AccountDetailPage> with SingleTickerP
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(right: 10.0),
+            child: IconButton(
+              icon: Icon(Icons.info,color: Colors.grey,),
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) => SavingsTipsDialog(),
+                );
+              },
+            ),
+          ),
+        ],
         toolbarHeight: 80,
         title: Text(
           widget.account.name,
