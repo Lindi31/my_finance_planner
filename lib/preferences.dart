@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:tests/theme/theme_manager.dart';
 
@@ -18,6 +19,15 @@ class SettingsState extends State<Settings> {
   final List<String> _languages = ['English', 'Deutsch'];
   final List<String> _currencies = ['Euro', 'Dollar', 'CHF'];
 
+  void checkForLanguage(BuildContext context){
+    String language = context.locale.toString();
+    print(language);
+    switch(language){
+      case "en_US": _selectedLanguage = "English"; break;
+      case "de_DE": _selectedLanguage = "Deutsch"; break;
+    }
+  }
+
   @override
   void dispose() {
     _themeManager.removeListener(themeListener);
@@ -34,18 +44,21 @@ class SettingsState extends State<Settings> {
     @override
     void initState() {
       super.initState();
+
       _themeManager.addListener(themeListener);
     }
 
   @override
   Widget build(BuildContext context) {
+    checkForLanguage(context);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         toolbarHeight: 80,
         title: Text(
-          'Settings',
+          'settings'.tr(),
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
@@ -64,7 +77,8 @@ class SettingsState extends State<Settings> {
           padding: const EdgeInsets.only(left: 16.0),
           child: NeumorphicButton(
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.pop(context, "Change");
+
             },
             style: NeumorphicStyle(
               shape: NeumorphicShape.flat,
@@ -90,7 +104,7 @@ class SettingsState extends State<Settings> {
               boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(15)),
             ),
             child: ListTile(
-              title: const Text('Dark Mode'),
+              title: Text('darkmode'.tr()),
               trailing: NeumorphicSwitch(
                 value: _themeManager.themeMode == ThemeMode.dark,
                 onChanged: (bool value) {
@@ -122,12 +136,17 @@ class SettingsState extends State<Settings> {
               boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(15)),
             ),
             child: ListTile(
-              title: const Text('Language'),
+              title: Text('language'.tr()),
               trailing: DropdownButton<String>(
                 value: _selectedLanguage,
                 onChanged: (String? newValue) {
                   setState(() {
                     _selectedLanguage = newValue!;
+                    switch(_selectedLanguage){
+                      case "English": context.setLocale(Locale('en', 'US')); break;
+                      case "Deutsch": context.setLocale(Locale('de', 'DE')); break;
+                    }
+
                     // Hier kannst du die Spracheinstellung entsprechend anpassen
                     // z.B. mit einer Funktion, die die App-Sprache ändert.
                   });
@@ -151,7 +170,7 @@ class SettingsState extends State<Settings> {
               boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(15)),
             ),
             child: ListTile(
-              title: const Text('Currency'),
+              title: Text('currency'.tr()),
               trailing: DropdownButton<String>(
                 value: _selectedCurrency,
                 onChanged: (String? newValue) {

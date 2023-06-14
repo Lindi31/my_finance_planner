@@ -8,10 +8,17 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tests/preferences.dart';
 import 'package:tests/theme/theme_constants.dart';
 import 'package:tests/theme/theme_manager.dart';
+import "package:easy_localization/easy_localization.dart";
 
-void main() {
-
-  runApp(const FinancialPlannerApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
+  runApp(EasyLocalization(
+      supportedLocales: [Locale('en', 'US'), Locale('de', 'DE')],
+      path: 'lib/assets/translations', // <-- change the path of the translation files
+      fallbackLocale: Locale('en', 'US'),
+      child: const FinancialPlannerApp()
+  ),);
 }
 ThemeManager _themeManager = ThemeManager();
 
@@ -21,8 +28,11 @@ class FinancialPlannerApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
+      locale: context.locale,
       debugShowCheckedModeBanner: false,
-      title: 'Financial Planner',
+      title: 'title'.tr(),
       theme: lightTheme,
       darkTheme: darkTheme,
       themeMode: _themeManager.themeMode,
@@ -102,9 +112,9 @@ class HomePageState extends State<HomePage> {
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: const Text(
-          'Financial Planner',
-          style: TextStyle(
+        title: Text(
+          'title'.tr(),
+          style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
             color: Colors.black54,
@@ -114,11 +124,15 @@ class HomePageState extends State<HomePage> {
           Padding(
             padding: const EdgeInsets.only(right: 16.0, top: 3, bottom: 7),
             child: NeumorphicButton(
-              onPressed: () {
-                Navigator.push(
+              onPressed: () async {
+
+                String value = await Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => Settings()),
                 );
+                setState(() {
+
+                });
               },
               style: NeumorphicStyle(
                 shape: NeumorphicShape.convex,
@@ -139,15 +153,15 @@ class HomePageState extends State<HomePage> {
           return GestureDetector(
             onLongPress: () {
               AwesomeDialog(
-                btnOkText: "Delete",
+                btnOkText: "Delete".tr(),
               btnOkColor: Colors.lightGreen,
               btnCancelColor: Colors.grey,
               context: context,
               animType: AnimType.bottomSlide,
               dialogType: DialogType.info,
-              title: 'Delete Account',
+              title: 'deleteaccount'.tr(),
               headerAnimationLoop: false,
-              desc: 'Are you sure you want to delete this account?',
+              desc: 'sure'.tr(),
               btnCancelOnPress: () {},
               btnOkOnPress: () {
                 deleteAccount(accounts[index]);
@@ -166,7 +180,7 @@ class HomePageState extends State<HomePage> {
               ),
               child: ListTile(
                 title: Text(accounts[index].name),
-                subtitle: Text('Balance: \$${accounts[index].balance.toStringAsFixed(2)}'),
+                subtitle: Text('${'balance'.tr()}: \$${accounts[index].balance.toStringAsFixed(2)}'),
                 onTap: () {
                   Navigator.push(
                     context,
@@ -274,8 +288,8 @@ class AddAccountDialogState extends State<AddAccountDialog> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
       ),
-      title: const Text(
-        'Add Account',
+      title: Text(
+        'addaccount'.tr(),
       ),
       titleTextStyle: TextStyle(
         color: Colors.black54,
@@ -304,7 +318,7 @@ class AddAccountDialogState extends State<AddAccountDialog> {
                 ),
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Please enter a name';
+                    return 'entername'.tr();
                   }
                   return null;
                 },
@@ -323,17 +337,17 @@ class AddAccountDialogState extends State<AddAccountDialog> {
               child: TextFormField(
                 controller: _balanceController,
                 decoration: InputDecoration(
-                  labelText: 'Balance',
+                  labelText: 'balance'.tr(),
                   border: InputBorder.none,
                   contentPadding: EdgeInsets.fromLTRB(12, 16, 12, 16),
                 ),
                 keyboardType: TextInputType.number,
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Please enter a balance';
+                    return 'enterbalance'.tr();
                   }
                   if (double.tryParse(value) == null) {
-                    return 'Please enter a valid number';
+                    return 'entervalidnumber'.tr();
                   }
                   return null;
                 },
@@ -358,7 +372,7 @@ class AddAccountDialogState extends State<AddAccountDialog> {
           ),
           padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
           child: Text(
-            'Cancel',
+            'cancel'.tr(),
             style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.bold,
@@ -378,7 +392,7 @@ class AddAccountDialogState extends State<AddAccountDialog> {
           ),
           padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
           child: Text(
-            'Add',
+            'add'.tr(),
             style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.bold,
@@ -533,9 +547,9 @@ class AccountDetailPageState extends State<AccountDetailPage> with SingleTickerP
           TabBar(
             controller: _tabController,
             labelColor: Colors.black,
-            tabs: const [
-              Tab(text: 'Einnahmen'),
-              Tab(text: 'Ausgaben'),
+            tabs: [
+              Tab(text: 'income'.tr()),
+              Tab(text: 'expenditures'.tr()),
             ],
           ),
           Expanded(
@@ -702,7 +716,7 @@ class AddTransactionDialogState extends State<AddTransactionDialog> {
         borderRadius: BorderRadius.circular(15),
       ),
       title: Text(
-        'Add Transaction',
+        'addtrans'.tr(),
         style: TextStyle(
           fontSize: 20,
           color: Colors.black54,
@@ -732,7 +746,7 @@ class AddTransactionDialogState extends State<AddTransactionDialog> {
               ),
               validator: (value) {
                 if (value!.isEmpty) {
-                  return 'Please enter a title';
+                  return 'entertitle'.tr();
                 }
                 return null;
               },
@@ -751,7 +765,7 @@ class AddTransactionDialogState extends State<AddTransactionDialog> {
             child: TextFormField(
               controller: _amountController,
               decoration: InputDecoration(
-                labelText: 'Amount',
+                labelText: 'amount'.tr(),
                 border: InputBorder.none,
                 contentPadding: EdgeInsets.symmetric(
                   vertical: 12,
@@ -761,10 +775,10 @@ class AddTransactionDialogState extends State<AddTransactionDialog> {
               keyboardType: TextInputType.number,
               validator: (value) {
                 if (value!.isEmpty) {
-                  return 'Please enter an amount';
+                  return 'enteramount'.tr();
                 }
                 if (double.tryParse(value) == null) {
-                  return 'Please enter a valid number';
+                  return 'entervalidnumber'.tr();
                 }
                 return null;
               },
@@ -783,7 +797,7 @@ class AddTransactionDialogState extends State<AddTransactionDialog> {
                 },
               ),
               SizedBox(width: 8),
-              Text('Expense', style: TextStyle(color: Colors.black87),),
+              Text('expense'.tr(), style: TextStyle(color: Colors.black87),),
             ],
           ),
         ],
@@ -804,7 +818,7 @@ class AddTransactionDialogState extends State<AddTransactionDialog> {
           ),
           padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
           child: Text(
-            'Cancel',
+            'cancel'.tr(),
             style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.bold,
@@ -824,7 +838,7 @@ class AddTransactionDialogState extends State<AddTransactionDialog> {
           ),
           padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
           child: Text(
-            'Add',
+            'add'.tr(),
             style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.bold,
