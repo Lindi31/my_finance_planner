@@ -708,7 +708,9 @@ class AddTransactionDialogState extends State<AddTransactionDialog> {
           color: Colors.black54,
         ),
       ),
-      content: Column(
+      content: Form(
+    key: _formKey, // Hier wird das _formKey dem Form-Widget zugewiesen
+    child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Neumorphic(
@@ -787,7 +789,7 @@ class AddTransactionDialogState extends State<AddTransactionDialog> {
             ],
           ),
         ],
-      ),
+      )),
       actions: [
         NeumorphicButton(
           onPressed: () {
