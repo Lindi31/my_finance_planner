@@ -1,15 +1,11 @@
 import 'dart:convert';
-
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:tests/preferences.dart';
-
 import 'package:tests/theme/theme_constants.dart';
 import 'package:tests/theme/theme_manager.dart';
 import "package:easy_localization/easy_localization.dart";
-
 import 'account/account_dialog.dart';
 import 'account/account.dart';
 import 'account/account_detail.dart';
