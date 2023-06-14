@@ -30,7 +30,7 @@ My Finance Planer is a fantastic application that helps you manage your finances
 - Serdar Özteke - [Gitty Profile](https://gitty.informatik.hs-mannheim.de/1925809)
 - Arlind Isa - [Gitty Profile](https://gitty.informatik.hs-mannheim.de/1925670)
 
-We welcome contributions from the community! If you have any suggestions for improvements or have found a bug, feel free to open a pull request or create an issue in our [GitHub repository](https://github.com/myapp).
+We welcome contributions from the community! If you have any suggestions for improvements or have found a bug, feel free to open a pull request or create an issue in our [Gitty repository](https://gitty.informatik.hs-mannheim.de/1925809/cpd_app_gruppe).
 
 ## License
 
