@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:tests/theme/theme_manager.dart';
 
@@ -12,19 +13,24 @@ class Settings extends StatefulWidget {
 }
 
 class SettingsState extends State<Settings> {
-
   String _selectedLanguage = 'English';
   String _selectedCurrency = 'Euro';
 
   final List<String> _languages = ['English', 'Deutsch'];
   final List<String> _currencies = ['Euro', 'Dollar', 'CHF'];
 
-  void checkForLanguage(BuildContext context){
+  void checkForLanguage(BuildContext context) {
     String language = context.locale.toString();
-    print(language);
-    switch(language){
-      case "en_US": _selectedLanguage = "English"; break;
-      case "de_DE": _selectedLanguage = "Deutsch"; break;
+    if (kDebugMode) {
+      print(language);
+    }
+    switch (language) {
+      case "en_US":
+        _selectedLanguage = "English";
+        break;
+      case "de_DE":
+        _selectedLanguage = "Deutsch";
+        break;
     }
   }
 
@@ -33,20 +39,19 @@ class SettingsState extends State<Settings> {
     _themeManager.removeListener(themeListener);
     super.dispose();
   }
-    themeListener(){
-      if(mounted){
-        setState(() {
 
-        });
-      }
+  themeListener() {
+    if (mounted) {
+      setState(() {});
     }
+  }
 
-    @override
-    void initState() {
-      super.initState();
+  @override
+  void initState() {
+    super.initState();
 
-      _themeManager.addListener(themeListener);
-    }
+    _themeManager.addListener(themeListener);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,14 +64,14 @@ class SettingsState extends State<Settings> {
         toolbarHeight: 80,
         title: Text(
           'settings'.tr(),
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
             color: Colors.black54,
           ),
         ),
         centerTitle: true,
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(15),
             bottomRight: Radius.circular(15),
@@ -78,17 +83,16 @@ class SettingsState extends State<Settings> {
           child: NeumorphicButton(
             onPressed: () {
               Navigator.pop(context, "Change");
-
             },
             style: NeumorphicStyle(
               shape: NeumorphicShape.flat,
-              boxShape: NeumorphicBoxShape.circle(),
+              boxShape: const NeumorphicBoxShape.circle(),
               depth: 6,
               intensity: 0.9,
               color: Colors.grey.shade100,
             ),
-            padding: EdgeInsets.all(10),
-            child: Icon(Icons.arrow_back, color: Colors.black38),
+            padding: const EdgeInsets.all(10),
+            child: const Icon(Icons.arrow_back, color: Colors.black38),
           ),
         ),
       ),
@@ -118,10 +122,14 @@ class SettingsState extends State<Settings> {
                   trackDepth: 5,
                   // Weitere Style-Eigenschaften hier anpassen
                   // Um den Switch heller zu machen, kannst du die Farben anpassen
-                  activeTrackColor: Colors.lightGreen, // Farbe für den aktiven Track
-                  inactiveTrackColor: Colors.grey.shade300, // Farbe für den inaktiven Track
-                  activeThumbColor: Colors.grey.shade100, // Farbe für den aktiven Thumb
-                  inactiveThumbColor: Colors.grey.shade200, // Farbe für den inaktiven Thumb
+                  activeTrackColor: Colors.lightGreen,
+                  // Farbe für den aktiven Track
+                  inactiveTrackColor: Colors.grey.shade300,
+                  // Farbe für den inaktiven Track
+                  activeThumbColor: Colors.grey.shade100,
+                  // Farbe für den aktiven Thumb
+                  inactiveThumbColor:
+                      Colors.grey.shade200, // Farbe für den inaktiven Thumb
                 ),
               ),
             ),
@@ -142,9 +150,13 @@ class SettingsState extends State<Settings> {
                 onChanged: (String? newValue) {
                   setState(() {
                     _selectedLanguage = newValue!;
-                    switch(_selectedLanguage){
-                      case "English": context.setLocale(Locale('en', 'US')); break;
-                      case "Deutsch": context.setLocale(Locale('de', 'DE')); break;
+                    switch (_selectedLanguage) {
+                      case "English":
+                        context.setLocale(const Locale('en', 'US'));
+                        break;
+                      case "Deutsch":
+                        context.setLocale(const Locale('de', 'DE'));
+                        break;
                     }
                   });
                 },
@@ -177,7 +189,8 @@ class SettingsState extends State<Settings> {
                     // z.B. mit einer Funktion, die die Währung ändert.
                   });
                 },
-                items: _currencies.map<DropdownMenuItem<String>>((String value) {
+                items:
+                    _currencies.map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
                     child: Text(value),

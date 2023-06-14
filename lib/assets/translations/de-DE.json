@@ -1,7 +1,7 @@
 {
   "title" : "Finanzplaner",
   "delete" : "Löschen",
-  "deleteaccount" : "Account Löschen",
+  "deleteaccount" : "Account löschen",
   "sure" : "Sind Sie sicher, dass Sie dieses Konto löschen möchten?",
   "balance" : "Bilanz",
   "addaccount" : "Konto hinzufügen",
@@ -18,7 +18,9 @@
   "enteramount": "Bitte geben Sie einen Betrag ein",
   "expense": "Ausgabe",
   "settings": "Einstellungen",
-  "darkmode": "Dunkel Modus",
+  "darkmode": "Dark Mode",
   "language": "Sprache",
-  "currency": "Währung"
+  "currency": "Währung",
+  "budget": "Budgetcheck",
+  "progress": "von deinem Budget ausgegeben"
 }

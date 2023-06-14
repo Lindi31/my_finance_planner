@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 const COLOR_PRIMARY = Colors.deepOrangeAccent;
@@ -6,9 +5,7 @@ const COLOR_PRIMARY = Colors.deepOrangeAccent;
 ThemeData lightTheme = ThemeData(
     brightness: Brightness.light,
     primaryColor: COLOR_PRIMARY,
-  fontFamily: "Montserrat"
-
-);
+    fontFamily: "Montserrat");
 
 ThemeData darkTheme = ThemeData(
   fontFamily: "Montserrat",

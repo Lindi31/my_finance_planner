@@ -1,9 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter/cupertino.dart';
-
 
 class SavingsTipsDialog extends StatelessWidget {
   final List<String> savingsTips = [
@@ -24,6 +20,8 @@ class SavingsTipsDialog extends StatelessWidget {
     'Nutze kostenlose Online-Ressourcen für Weiterbildung und Hobbys.',
   ];
 
+  SavingsTipsDialog({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -38,49 +36,48 @@ class SavingsTipsDialog extends StatelessWidget {
             CarouselSlider.builder(
               itemCount: savingsTips.length,
               itemBuilder: (BuildContext context, int index, int realIndex) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Neumorphic(
+                return Neumorphic(
+                    margin: const EdgeInsets.only(bottom: 5),
                     style: NeumorphicStyle(
-
-                      boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(13.0)),
+                      boxShape: NeumorphicBoxShape.roundRect(
+                          BorderRadius.circular(13.0)),
                     ),
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10.0),
-                        color: Colors.grey.shade100, // Setze die Hintergrundfarbe auf rot
+                        color: Colors.grey
+                            .shade100, // Setze die Hintergrundfarbe auf rot
                       ),
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column( mainAxisAlignment: MainAxisAlignment.center,
+                      padding: const EdgeInsets.all(14.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-
                           Text(
                             savingsTips[index],
-                            style: TextStyle(fontSize: 18.0),
+                            style: const TextStyle(fontSize: 18.0),
                             textAlign: TextAlign.center,
                           ),
                         ],
                       ),
                     ),
-                  ),
+
                 );
               },
               options: CarouselOptions(
                 height: 250.0,
                 enlargeCenterPage: true,
-                viewportFraction: 0.85,
+                viewportFraction: 0.76,
                 initialPage: 0,
                 enableInfiniteScroll: true,
                 autoPlay: true,
-                autoPlayInterval: Duration(seconds: 4),
-                autoPlayAnimationDuration: Duration(milliseconds: 700),
+                autoPlayInterval: const Duration(seconds: 4),
+                autoPlayAnimationDuration: const Duration(milliseconds: 700),
                 autoPlayCurve: Curves.fastOutSlowIn,
                 pauseAutoPlayOnTouch: true,
               ),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             NeumorphicButton(
-              child: Text('Close'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -89,10 +86,11 @@ class SavingsTipsDialog extends StatelessWidget {
                 depth: 10,
                 intensity: 0.9,
                 shape: NeumorphicShape.flat,
-                boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(15.0)),
+                boxShape:
+                    NeumorphicBoxShape.roundRect(BorderRadius.circular(15.0)),
               ),
+              child: const Text('Close'),
             ),
-
           ],
         ),
       ),

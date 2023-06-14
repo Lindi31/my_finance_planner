@@ -1,18 +1,18 @@
 {
   "title" : "Financial Planner",
   "delete" : "Delete",
-  "deleteaccount" : "Delete Account",
+  "deleteaccount" : "Delete account",
   "sure" : "Are you sure you want to delete this account?",
   "balance" : "Balance",
-  "addaccount" : "Add Account",
+  "addaccount" : "Add account",
   "entername" : "Please enter a name",
   "enterbalance" : "Please enter a balance",
   "entervalidnumber" : "Please enter a valid number",
   "cancel" : "Cancel",
   "add" : "Add",
   "income": "Income",
-  "expenditures": "Expenditures",
-  "addtrans": "Add Transaction",
+  "expenditures": "Expenses",
+  "addtrans": "Add transaction",
   "entertitle": "Please enter a title",
   "amount": "Amount",
   "enteramount": "Please enter an amount",
@@ -20,5 +20,7 @@
   "settings": "Settings",
   "darkmode": "Dark Mode",
   "language": "Language",
-  "currency": "Currency"
+  "currency": "Currency",
+  "budget": "Budget check",
+  "progress": "of your budget spent"
 }

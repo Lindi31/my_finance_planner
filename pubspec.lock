@@ -65,6 +65,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.12.0"
+  circular_seek_bar:
+    dependency: "direct main"
+    description:
+      name: circular_seek_bar
+      sha256: "78ff5e54b6012523f3ce19b33c870ab75433ea96977f44606f1641a8ac5c1873"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0+2"
   clock:
     dependency: transitive
     description:
@@ -450,6 +458,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "21.2.10"
+  tab_indicator_styler:
+    dependency: "direct main"
+    description:
+      name: tab_indicator_styler
+      sha256: "9e7e90367e20f71f3882fc6578fdcced35ab1c66ab20fcb623cdcc20d2796c76"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0"
   term_glyph:
     dependency: transitive
     description:
