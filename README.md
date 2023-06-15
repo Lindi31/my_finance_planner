@@ -13,7 +13,7 @@ My Finance Planer is a fantastic application that helps you manage your finances
 ![Screenshot](5.png)<br>
 - **Custom Goals:** Set personalized financial goals and track your progress.
 - **Monthly budget:** Set personalized monthly budget maximums and keep your spendings under control.<br>
-  <img src="Budget check" alt= “4.png” width="200" height="500"><br>
+  <img src="4.png" alt= “4.png” width="200" height="500"><br>
 
 ## Installation
 
