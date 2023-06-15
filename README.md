@@ -1,20 +1,20 @@
 # My Finance Planer
 <br>
 
-<p style="text-align:center;"><img src="1.png" alt= “1.png” height="450"></p><br>
+<p align="center"><img src="1.png" alt="1.png" height="560"></p><br>
 My Finance Planer is a fantastic application that helps you manage your finances and provides money-saving tips. It offers an intuitive user interface and useful features to help you achieve your financial goals.
 
 ## Features
 
 - **Financial Overview:** Display your account balances, income, and expenses in a clear and concise manner.<br>
-  <p style="text-align:center;"><img src="3.png" alt= “3.png” height="450"></p><br>
+  <p align="center"><img src="3.png" alt="3.png" height="560"></p><br>
 - **Budget Management:** Define budgets for different categories and keep track of your spending.
 - **Savings Tips:** Receive regular savings tips and advice to reduce your expenses.<br>
-  <p style="text-align:center;"><img src="5.png" alt= “5.png” height="450"></p><br>
+  <p style="text-align:center;"><img src="5.png" alt= “5.png” height="560"></p><br>
 - **Custom Goals:** Set personalized financial goals and track your progress.
 - **Monthly budget:** Set personalized monthly budget maximums and keep your spendings under control.<br>
-  <p style="text-align:center;"><img src="4.png" alt= “4.png” height="450"></p><br>
-
+  <p style="text-align:center;"><img src="4.png" alt= “4.png” height="560"></p><br>
+ 
 ## Installation
 
 1. Download the latest version of the app from the [App Store](https://nicht-existent.com).
