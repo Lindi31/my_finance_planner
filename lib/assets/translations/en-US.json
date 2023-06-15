@@ -1,5 +1,5 @@
 {
-  "title" : "Financial Planner",
+  "title" : "My Finance Planner",
   "delete" : "Delete",
   "deleteaccount" : "Delete account",
   "sure" : "Are you sure you want to delete this account?",
@@ -22,5 +22,6 @@
   "language": "Language",
   "currency": "Currency",
   "budget": "Budget check",
-  "progress": "of your budget spent"
+  "progress": "of your budget spent",
+  "monthlyexpenses": "Monthly Expenses"
 }

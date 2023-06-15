@@ -186,6 +186,7 @@ class AccountDetailPageState extends State<AccountDetailPage>
           TabBar(
             controller: _tabController,
             labelColor: Colors.black,
+            labelStyle: const TextStyle(fontSize: 14),
             unselectedLabelColor: Colors.black54,
             indicator: MaterialIndicator(
               height: 4,

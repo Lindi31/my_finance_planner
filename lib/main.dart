@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tests/preferences.dart';
@@ -30,6 +31,7 @@ class FinancialPlannerApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     return MaterialApp(
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
@@ -128,8 +130,9 @@ class HomePageState extends State<HomePage> {
         ),
         actions: [
           Padding(
-            padding: const EdgeInsets.only(right: 16.0, top: 3, bottom: 7),
+            padding: const EdgeInsets.only(right: 16.0, top: 2, bottom: 0),
             child: NeumorphicButton(
+              margin: EdgeInsets.only(bottom: 10),
               onPressed: () async {
                 await Navigator.push(
                   context,

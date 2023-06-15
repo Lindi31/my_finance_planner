@@ -1,5 +1,5 @@
 {
-  "title" : "Finanzplaner",
+  "title" : "My Finance Planner",
   "delete" : "Löschen",
   "deleteaccount" : "Account löschen",
   "sure" : "Sind Sie sicher, dass Sie dieses Konto löschen möchten?",
@@ -22,5 +22,6 @@
   "language": "Sprache",
   "currency": "Währung",
   "budget": "Budgetcheck",
-  "progress": "von deinem Budget ausgegeben"
+  "progress": "von deinem Budget ausgegeben",
+  "monthlyexpenses": "Monatliche Ausgaben"
 }
