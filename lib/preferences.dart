@@ -164,6 +164,10 @@ class SettingsState extends State<Settings> {
             child: ListTile(
               title: Text('language'.tr()),
               trailing: DropdownButton<String>(
+                icon: const Icon(Icons.expand_more),
+                underline: const SizedBox(),
+                iconSize: 20,
+                borderRadius: BorderRadius.circular(15),
                 value: _selectedLanguage,
                 onChanged: (String? newValue) {
                   setState(() {
@@ -199,6 +203,10 @@ class SettingsState extends State<Settings> {
             child: ListTile(
               title: Text('currency'.tr()),
               trailing: DropdownButton<String>(
+                borderRadius: BorderRadius.circular(15),
+                underline: const SizedBox(),
+                iconSize: 20,
+                icon: const Icon(Icons.expand_more),
                 value: _selectedCurrency,
                 onChanged: (String? newValue) {
                   setState(() {
