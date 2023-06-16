@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tests/saving_tips.dart';
 import 'package:tests/transaction/transaction_dialog.dart';
 import 'package:tests/transaction/transaction.dart';
+import '../main.dart';
 import 'account.dart';
 import '../chart/expense_chart.dart';
 import '../chart/expense_data.dart';
@@ -29,11 +30,32 @@ class AccountDetailPageState extends State<AccountDetailPage>
   List<Transaction> incomeTransactions = [];
   List<Transaction> expenseTransactions = [];
   List<ExpenseData> expenseData = [];
+  String _selectedCurrency="€";
 
+  Future<String> getCurrencyFromSharedPreferences(String key) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.getString(key)=="Euro"){
+      _selectedCurrency="€";
+    }
+    if (prefs.getString(key)=="Dollar"){
+      _selectedCurrency=r"$";
+    }
+    if (prefs.getString(key)=="CHF"){
+      _selectedCurrency="CHF";
+    }
+
+    return prefs.getString(key) ?? 'Euro';
+  }
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
+
+    getCurrencyFromSharedPreferences("currency").then((value) {
+      setState(() {
+
+      });
+    });
     loadTransactions();
   }
 
@@ -167,7 +189,11 @@ class AccountDetailPageState extends State<AccountDetailPage>
           padding: const EdgeInsets.only(left: 16.0),
           child: NeumorphicButton(
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.pop(context); // Zurück zur vorherigen Seite
+              Navigator.pushReplacement( // Neue Seite öffnen und vorherige Seite ersetzen
+                context,
+                MaterialPageRoute(builder: (context) => const HomePage()),
+              );
             },
             style: NeumorphicStyle(
               shape: NeumorphicShape.flat,
@@ -329,7 +355,7 @@ class AccountDetailPageState extends State<AccountDetailPage>
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      '${value.round()}' '€',
+                      '${value.round()}$_selectedCurrency',
                     ),
                     Text(
                       'progress'.tr(),
@@ -349,8 +375,8 @@ class AccountDetailPageState extends State<AccountDetailPage>
           subtitle: Text(transactionsList[index].title),
           trailing: Text(
             transactionsList[index].isExpense
-                ? '-\$${transactionsList[index].amount.toStringAsFixed(2)}'
-                : '+\$${transactionsList[index].amount.toStringAsFixed(2)}',
+                ? '-$_selectedCurrency${transactionsList[index].amount.toStringAsFixed(2)}'
+                : '+$_selectedCurrency${transactionsList[index].amount.toStringAsFixed(2)}',
             style: TextStyle(
               color:
                   transactionsList[index].isExpense ? Colors.red : Colors.green,

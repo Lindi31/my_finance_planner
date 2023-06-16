@@ -23,5 +23,6 @@
   "currency": "Währung",
   "budget": "Budgetcheck",
   "progress": "von deinem Budget ausgegeben",
-  "monthlyexpenses": "Monatliche Ausgaben"
+  "monthlyexpenses": "Monatliche Ausgaben",
+  "close": "Schließen"
 }

@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 
 class SavingsTipsDialog extends StatelessWidget {
@@ -89,7 +90,7 @@ class SavingsTipsDialog extends StatelessWidget {
                 boxShape:
                     NeumorphicBoxShape.roundRect(BorderRadius.circular(15.0)),
               ),
-              child: const Text('Close'),
+              child:  Text('close'.tr()),
             ),
           ],
         ),

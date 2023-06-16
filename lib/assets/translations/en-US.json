@@ -23,5 +23,6 @@
   "currency": "Currency",
   "budget": "Budget check",
   "progress": "of your budget spent",
-  "monthlyexpenses": "Monthly Expenses"
+  "monthlyexpenses": "Monthly Expenses",
+  "close": "Close"
 }

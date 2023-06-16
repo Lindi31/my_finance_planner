@@ -55,11 +55,32 @@ class HomePage extends StatefulWidget {
 
 class HomePageState extends State<HomePage> {
   List<Account> accounts = [];
+  String _selectedCurrency="€";
+
+  Future<String> getCurrencyFromSharedPreferences(String key) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.getString(key)=="Euro"){
+      _selectedCurrency="€";
+    }
+    if (prefs.getString(key)=="Dollar"){
+      _selectedCurrency=r"$";
+    }
+    if (prefs.getString(key)=="CHF"){
+      _selectedCurrency="CHF";
+    }
+
+    return prefs.getString(key) ?? 'Euro';
+  }
 
   @override
   void initState() {
     super.initState();
     _themeManager.addListener(themeListener);
+    getCurrencyFromSharedPreferences("currency").then((value) {
+      setState(() {
+
+      });
+    });
     loadAccounts();
   }
 
@@ -187,7 +208,7 @@ class HomePageState extends State<HomePage> {
               child: ListTile(
                 title: Text(accounts[index].name),
                 subtitle: Text(
-                    '${'balance'.tr()}: \$${accounts[index].balance.toStringAsFixed(2)}'),
+                    '${'balance'.tr()}: $_selectedCurrency${accounts[index].balance.toStringAsFixed(2)}'),
                 onTap: () {
                   Navigator.push(
                     context,

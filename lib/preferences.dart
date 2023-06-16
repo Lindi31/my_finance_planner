@@ -1,7 +1,12 @@
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tests/theme/theme_manager.dart';
+
+import 'main.dart';
 
 ThemeManager _themeManager = ThemeManager();
 
@@ -40,6 +45,16 @@ class SettingsState extends State<Settings> {
     super.dispose();
   }
 
+  Future<void> saveCurrencyToSharedPreferences(String key, String value) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString(key, value);
+  }
+
+  Future<String> getCurrencyFromSharedPreferences(String key) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString(key) ?? 'Euro';
+  }
+
   themeListener() {
     if (mounted) {
       setState(() {});
@@ -50,6 +65,11 @@ class SettingsState extends State<Settings> {
   void initState() {
     super.initState();
 
+    getCurrencyFromSharedPreferences("currency").then((value) {
+      setState(() {
+        _selectedCurrency = value;
+      });
+    });
     _themeManager.addListener(themeListener);
   }
 
@@ -82,7 +102,11 @@ class SettingsState extends State<Settings> {
           padding: const EdgeInsets.only(left: 16.0),
           child: NeumorphicButton(
             onPressed: () {
-              Navigator.pop(context, "Change");
+              Navigator.pop(context); // Zurück zur vorherigen Seite
+              Navigator.pushReplacement( // Neue Seite öffnen und vorherige Seite ersetzen
+                context,
+                MaterialPageRoute(builder: (context) => const HomePage()),
+              );
             },
             style: NeumorphicStyle(
               shape: NeumorphicShape.flat,
@@ -120,16 +144,10 @@ class SettingsState extends State<Settings> {
                   lightSource: LightSource.topLeft,
                   thumbShape: NeumorphicShape.concave,
                   trackDepth: 5,
-                  // Weitere Style-Eigenschaften hier anpassen
-                  // Um den Switch heller zu machen, kannst du die Farben anpassen
                   activeTrackColor: Colors.lightGreen,
-                  // Farbe für den aktiven Track
                   inactiveTrackColor: Colors.grey.shade300,
-                  // Farbe für den inaktiven Track
                   activeThumbColor: Colors.grey.shade100,
-                  // Farbe für den aktiven Thumb
-                  inactiveThumbColor:
-                      Colors.grey.shade200, // Farbe für den inaktiven Thumb
+                  inactiveThumbColor: Colors.grey.shade200,
                 ),
               ),
             ),
@@ -185,12 +203,10 @@ class SettingsState extends State<Settings> {
                 onChanged: (String? newValue) {
                   setState(() {
                     _selectedCurrency = newValue!;
-                    // Hier kannst du die Währungseinstellung entsprechend anpassen
-                    // z.B. mit einer Funktion, die die Währung ändert.
+                    saveCurrencyToSharedPreferences("currency", _selectedCurrency);
                   });
                 },
-                items:
-                    _currencies.map<DropdownMenuItem<String>>((String value) {
+                items: _currencies.map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
                     child: Text(value),
