@@ -15,17 +15,16 @@ import 'account/account_detail.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
-  runApp(
-      ChangeNotifierProvider(
-        create: (context) => ThemeManager(),
-        child: EasyLocalization(
-            supportedLocales: const [Locale('en', 'US'), Locale('de', 'DE')],
-            path: 'lib/assets/translations',
-            // <-- change the path of the translation files
-            fallbackLocale: const Locale('en', 'US'),
-            child: const FinancialPlannerApp()),
-      ));
-  }
+  runApp(ChangeNotifierProvider(
+    create: (context) => ThemeManager(),
+    child: EasyLocalization(
+        supportedLocales: const [Locale('en', 'US'), Locale('de', 'DE')],
+        path: 'lib/assets/translations',
+        // <-- change the path of the translation files
+        fallbackLocale: const Locale('en', 'US'),
+        child: const FinancialPlannerApp()),
+  ));
+}
 
 ThemeManager _themeManager = ThemeManager();
 
@@ -34,8 +33,8 @@ class FinancialPlannerApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setEnabledSystemUIMode(
-        SystemUiMode.manual, overlays: [SystemUiOverlay.top]);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+        overlays: [SystemUiOverlay.top]);
     return MaterialApp(
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
@@ -112,7 +111,7 @@ class HomePageState extends State<HomePage> {
   Future<void> saveAccounts() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     List<String> accountJsonList =
-    accounts.map((account) => json.encode(account.toJson())).toList();
+        accounts.map((account) => json.encode(account.toJson())).toList();
     await prefs.setStringList('accounts', accountJsonList);
   }
 
@@ -149,14 +148,19 @@ class HomePageState extends State<HomePage> {
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
+        leading: Padding(
+            padding: EdgeInsets.only(left: 5),
+            child: Image.asset(
+              'lib/assets/mfa_logo.png',
+              width: 32,
+              height: 32,
+            )),
         title: Text(
           'title'.tr(),
           style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: Theme
-                  .of(context)
-                  .brightness == Brightness.dark
+              color: Theme.of(context).brightness == Brightness.dark
                   ? Colors.white70
                   : Colors.black87),
         ),
@@ -178,29 +182,18 @@ class HomePageState extends State<HomePage> {
                 depth: 8,
                 intensity: 0.9,
                 shadowLightColor:
-                Theme
-                    .of(context)
-                    .brightness == Brightness.light
-                    ? const NeumorphicStyle().shadowLightColor
-                    : Theme
-                    .of(context)
-                    .shadowColor,
-                shadowDarkColor:
-                Theme
-                    .of(context)
-                    .brightness == Brightness.dark
+                    Theme.of(context).brightness == Brightness.light
+                        ? const NeumorphicStyle().shadowLightColor
+                        : Theme.of(context).shadowColor,
+                shadowDarkColor: Theme.of(context).brightness == Brightness.dark
                     ? const NeumorphicStyle().shadowDarkColor
                     : grey400,
-                color: Theme
-                    .of(context)
-                    .brightness == Brightness.light
+                color: Theme.of(context).brightness == Brightness.light
                     ? grey200
                     : grey800,
               ),
               child: Icon(Icons.settings,
-                  color: Theme
-                      .of(context)
-                      .unselectedWidgetColor),
+                  color: Theme.of(context).unselectedWidgetColor),
             ),
           ),
         ],
@@ -216,9 +209,7 @@ class HomePageState extends State<HomePage> {
                   AwesomeDialog(
                     btnOkText: "Delete".tr(),
                     btnOkColor: Colors.lightGreen,
-                    btnCancelColor: Theme
-                        .of(context)
-                        .shadowColor,
+                    btnCancelColor: Theme.of(context).shadowColor,
                     context: context,
                     animType: AnimType.bottomSlide,
                     dialogType: DialogType.info,
@@ -237,41 +228,31 @@ class HomePageState extends State<HomePage> {
                     depth: 8,
                     intensity: 1,
                     shadowLightColor:
-                    Theme
-                        .of(context)
-                        .brightness == Brightness.light
-                        ? const NeumorphicStyle().shadowLightColor
-                        : grey800,
+                        Theme.of(context).brightness == Brightness.light
+                            ? const NeumorphicStyle().shadowLightColor
+                            : grey800,
                     shadowDarkColor:
-                    Theme
-                        .of(context)
-                        .brightness == Brightness.dark
-                        ? const NeumorphicStyle().shadowDarkColor
-                        : Theme
-                        .of(context)
-                        .shadowColor,
-                    color: Theme
-                        .of(context)
-                        .brightness == Brightness.light
+                        Theme.of(context).brightness == Brightness.dark
+                            ? const NeumorphicStyle().shadowDarkColor
+                            : Theme.of(context).shadowColor,
+                    color: Theme.of(context).brightness == Brightness.light
                         ? grey200
                         : grey800,
                     boxShape:
-                    NeumorphicBoxShape.roundRect(BorderRadius.circular(15)),
+                        NeumorphicBoxShape.roundRect(BorderRadius.circular(15)),
                   ),
                   child: ListTile(
                     title: Text(accounts[index].name),
                     subtitle: Text(
-                        '${'balance'.tr()}: $_selectedCurrency${accounts[index]
-                            .balance.toStringAsFixed(2)}'),
+                        '${'balance'.tr()}: $_selectedCurrency${accounts[index].balance.toStringAsFixed(2)}'),
                     onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              AccountDetailPage(
-                                account: accounts[index],
-                                updateAccountBalance: updateAccountBalance,
-                              ),
+                          builder: (context) => AccountDetailPage(
+                            account: accounts[index],
+                            updateAccountBalance: updateAccountBalance,
+                          ),
                         ),
                       );
                     },
@@ -294,21 +275,13 @@ class HomePageState extends State<HomePage> {
         style: NeumorphicStyle(
           depth: 8,
           intensity: 1,
-          shadowLightColor: Theme
-              .of(context)
-              .brightness == Brightness.light
+          shadowLightColor: Theme.of(context).brightness == Brightness.light
               ? const NeumorphicStyle().shadowLightColor
-              : Theme
-              .of(context)
-              .shadowColor,
-          shadowDarkColor: Theme
-              .of(context)
-              .brightness == Brightness.dark
+              : Theme.of(context).shadowColor,
+          shadowDarkColor: Theme.of(context).brightness == Brightness.dark
               ? const NeumorphicStyle().shadowDarkColor
               : grey400,
-          color: Theme
-              .of(context)
-              .brightness == Brightness.light
+          color: Theme.of(context).brightness == Brightness.light
               ? grey200
               : grey800,
           boxShape: const NeumorphicBoxShape.circle(),
@@ -316,9 +289,7 @@ class HomePageState extends State<HomePage> {
         child: Icon(
           Icons.add,
           size: 60,
-          color: Theme
-              .of(context)
-              .brightness == Brightness.light
+          color: Theme.of(context).brightness == Brightness.light
               ? Colors.black12
               : Colors.white12,
         ),
