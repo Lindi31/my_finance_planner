@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import '../theme/theme_constants.dart';
 import 'account.dart';
 
 class AddAccountDialog extends StatefulWidget {
@@ -33,7 +34,6 @@ class AddAccountDialogState extends State<AddAccountDialog> {
         balance: balance,
       );
       widget.addAccount(account);
-
       Navigator.of(context).pop();
     }
   }
@@ -48,7 +48,6 @@ class AddAccountDialogState extends State<AddAccountDialog> {
         'addaccount'.tr(),
       ),
       titleTextStyle: const TextStyle(
-        color: Colors.black54,
         fontSize: 20,
       ),
       content: Form(
@@ -60,7 +59,16 @@ class AddAccountDialogState extends State<AddAccountDialog> {
               style: NeumorphicStyle(
                 depth: -5,
                 intensity: 0.8,
-                color: Colors.grey.shade100,
+                shadowLightColor:
+                    Theme.of(context).brightness == Brightness.light
+                        ? const NeumorphicStyle().shadowLightColor
+                        : Theme.of(context).shadowColor,
+                shadowDarkColor: Theme.of(context).brightness == Brightness.dark
+                    ? const NeumorphicStyle().shadowDarkColor
+                    : grey400,
+                color: Theme.of(context).brightness == Brightness.light
+                    ? grey200
+                    : grey800,
                 boxShape: NeumorphicBoxShape.roundRect(
                   BorderRadius.circular(12),
                 ),
@@ -85,7 +93,16 @@ class AddAccountDialogState extends State<AddAccountDialog> {
               style: NeumorphicStyle(
                 depth: -5,
                 intensity: 0.8,
-                color: Colors.grey.shade100,
+                shadowLightColor:
+                    Theme.of(context).brightness == Brightness.light
+                        ? const NeumorphicStyle().shadowLightColor
+                        : Theme.of(context).shadowColor,
+                shadowDarkColor: Theme.of(context).brightness == Brightness.dark
+                    ? const NeumorphicStyle().shadowDarkColor
+                    : grey400,
+                color: Theme.of(context).brightness == Brightness.light
+                    ? grey200
+                    : grey800,
                 boxShape: NeumorphicBoxShape.roundRect(
                   BorderRadius.circular(12),
                 ),
@@ -114,6 +131,7 @@ class AddAccountDialogState extends State<AddAccountDialog> {
       ),
       actions: [
         NeumorphicButton(
+          margin: const EdgeInsets.fromLTRB(0, 0, 4, 4),
           onPressed: () {
             Navigator.of(context).pop();
           },
@@ -124,7 +142,15 @@ class AddAccountDialogState extends State<AddAccountDialog> {
             boxShape: NeumorphicBoxShape.roundRect(
               BorderRadius.circular(12),
             ),
-            color: Colors.grey.shade100,
+            shadowLightColor: Theme.of(context).brightness == Brightness.light
+                ? const NeumorphicStyle().shadowLightColor
+                : Theme.of(context).shadowColor,
+            shadowDarkColor: Theme.of(context).brightness == Brightness.dark
+                ? const NeumorphicStyle().shadowDarkColor
+                : grey400,
+            color: Theme.of(context).brightness == Brightness.light
+                ? grey200
+                : grey800,
           ),
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
           child: Text(
@@ -144,7 +170,15 @@ class AddAccountDialogState extends State<AddAccountDialog> {
             boxShape: NeumorphicBoxShape.roundRect(
               BorderRadius.circular(12),
             ),
-            color: Colors.grey.shade100,
+            shadowLightColor: Theme.of(context).brightness == Brightness.light
+                ? const NeumorphicStyle().shadowLightColor
+                : Theme.of(context).shadowColor,
+            shadowDarkColor: Theme.of(context).brightness == Brightness.dark
+                ? const NeumorphicStyle().shadowDarkColor
+                : grey400,
+            color: Theme.of(context).brightness == Brightness.light
+                ? grey200
+                : grey800,
           ),
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
           child: Text(

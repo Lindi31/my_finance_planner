@@ -1,9 +1,11 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:tests/transaction/transaction.dart';
+import '../theme/theme_constants.dart';
 
 class AddTransactionDialog extends StatefulWidget {
   final Function addTransaction;
+
   const AddTransactionDialog({super.key, required this.addTransaction});
 
   @override
@@ -48,11 +50,10 @@ class AddTransactionDialogState extends State<AddTransactionDialog> {
         'addtrans'.tr(),
         style: const TextStyle(
           fontSize: 20,
-          color: Colors.black54,
         ),
       ),
       content: Form(
-          key: _formKey, // Hier wird das _formKey dem Form-Widget zugewiesen
+          key: _formKey, //
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -60,7 +61,17 @@ class AddTransactionDialogState extends State<AddTransactionDialog> {
                 style: NeumorphicStyle(
                   depth: -5,
                   intensity: 0.8,
-                  color: Colors.grey.shade100,
+                  shadowLightColor:
+                      Theme.of(context).brightness == Brightness.light
+                          ? const NeumorphicStyle().shadowLightColor
+                          : Theme.of(context).shadowColor,
+                  shadowDarkColor:
+                      Theme.of(context).brightness == Brightness.dark
+                          ? const NeumorphicStyle().shadowDarkColor
+                          : grey400,
+                  color: Theme.of(context).brightness == Brightness.light
+                      ? grey200
+                      : grey800,
                   boxShape: NeumorphicBoxShape.roundRect(
                     BorderRadius.circular(12),
                   ),
@@ -88,7 +99,17 @@ class AddTransactionDialogState extends State<AddTransactionDialog> {
                 style: NeumorphicStyle(
                   depth: -5,
                   intensity: 0.8,
-                  color: Colors.grey.shade100,
+                  shadowLightColor:
+                      Theme.of(context).brightness == Brightness.light
+                          ? const NeumorphicStyle().shadowLightColor
+                          : Theme.of(context).shadowColor,
+                  shadowDarkColor:
+                      Theme.of(context).brightness == Brightness.dark
+                          ? const NeumorphicStyle().shadowDarkColor
+                          : grey400,
+                  color: Theme.of(context).brightness == Brightness.light
+                      ? grey200
+                      : grey800,
                   boxShape: NeumorphicBoxShape.roundRect(
                     BorderRadius.circular(12),
                   ),
@@ -121,7 +142,10 @@ class AddTransactionDialogState extends State<AddTransactionDialog> {
                   NeumorphicCheckbox(
                     style: NeumorphicCheckboxStyle(
                         selectedColor: Colors.lightGreen,
-                        disabledColor: Colors.grey.shade200,
+                        disabledColor:
+                            Theme.of(context).brightness == Brightness.light
+                                ? grey200
+                                : grey800,
                         selectedDepth: -10,
                         unselectedDepth: 8),
                     value: _isExpense,
@@ -134,7 +158,6 @@ class AddTransactionDialogState extends State<AddTransactionDialog> {
                   const SizedBox(width: 8),
                   Text(
                     'expense'.tr(),
-                    style: const TextStyle(color: Colors.black87),
                   ),
                 ],
               ),
@@ -152,7 +175,15 @@ class AddTransactionDialogState extends State<AddTransactionDialog> {
             boxShape: NeumorphicBoxShape.roundRect(
               BorderRadius.circular(12),
             ),
-            color: Colors.grey.shade100,
+            shadowLightColor: Theme.of(context).brightness == Brightness.light
+                ? const NeumorphicStyle().shadowLightColor
+                : Theme.of(context).shadowColor,
+            shadowDarkColor: Theme.of(context).brightness == Brightness.dark
+                ? const NeumorphicStyle().shadowDarkColor
+                : grey400,
+            color: Theme.of(context).brightness == Brightness.light
+                ? grey200
+                : grey800,
           ),
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
           child: Text(
@@ -164,6 +195,7 @@ class AddTransactionDialogState extends State<AddTransactionDialog> {
           ),
         ),
         NeumorphicButton(
+          margin: const EdgeInsets.fromLTRB(0, 0, 4, 4),
           onPressed: _submitForm,
           style: NeumorphicStyle(
             shape: NeumorphicShape.concave,
@@ -172,7 +204,15 @@ class AddTransactionDialogState extends State<AddTransactionDialog> {
             boxShape: NeumorphicBoxShape.roundRect(
               BorderRadius.circular(12),
             ),
-            color: Colors.grey.shade100,
+            shadowLightColor: Theme.of(context).brightness == Brightness.light
+                ? const NeumorphicStyle().shadowLightColor
+                : Theme.of(context).shadowColor,
+            shadowDarkColor: Theme.of(context).brightness == Brightness.dark
+                ? const NeumorphicStyle().shadowDarkColor
+                : grey400,
+            color: Theme.of(context).brightness == Brightness.light
+                ? grey200
+                : grey800,
           ),
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
           child: Text(

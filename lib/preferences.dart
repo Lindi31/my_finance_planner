@@ -1,11 +1,11 @@
 import 'dart:async';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tests/theme/theme_constants.dart';
 import 'package:tests/theme/theme_manager.dart';
-
 import 'main.dart';
 
 ThemeManager _themeManager = ThemeManager();
@@ -50,6 +50,11 @@ class SettingsState extends State<Settings> {
     await prefs.setString(key, value);
   }
 
+  Future<void> saveThemeToSharedPreferences(String key, bool value) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(key, value);
+  }
+
   Future<String> getCurrencyFromSharedPreferences(String key) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString(key) ?? 'Euro';
@@ -84,11 +89,12 @@ class SettingsState extends State<Settings> {
         toolbarHeight: 80,
         title: Text(
           'settings'.tr(),
-          style: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Colors.black54,
-          ),
+          style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? Colors.white70
+                  : Colors.black87),
         ),
         centerTitle: true,
         shape: const RoundedRectangleBorder(
@@ -97,13 +103,14 @@ class SettingsState extends State<Settings> {
             bottomRight: Radius.circular(15),
           ),
         ),
-        shadowColor: Colors.grey.shade300,
+        shadowColor: Theme.of(context).shadowColor,
         leading: Padding(
           padding: const EdgeInsets.only(left: 16.0),
           child: NeumorphicButton(
             onPressed: () {
               Navigator.pop(context); // Zurück zur vorherigen Seite
-              Navigator.pushReplacement( // Neue Seite öffnen und vorherige Seite ersetzen
+              Navigator.pushReplacement(
+                // Neue Seite öffnen und vorherige Seite ersetzen
                 context,
                 MaterialPageRoute(builder: (context) => const HomePage()),
               );
@@ -111,12 +118,21 @@ class SettingsState extends State<Settings> {
             style: NeumorphicStyle(
               shape: NeumorphicShape.flat,
               boxShape: const NeumorphicBoxShape.circle(),
-              depth: 6,
+              depth: 7,
               intensity: 0.9,
-              color: Colors.grey.shade100,
+              shadowLightColor: Theme.of(context).brightness == Brightness.light
+                  ? const NeumorphicStyle().shadowLightColor
+                  : Theme.of(context).shadowColor,
+              shadowDarkColor: Theme.of(context).brightness == Brightness.dark
+                  ? const NeumorphicStyle().shadowDarkColor
+                  : grey400,
+              color: Theme.of(context).brightness == Brightness.light
+                  ? grey200
+                  : grey800,
             ),
-            padding: const EdgeInsets.all(10),
-            child: const Icon(Icons.arrow_back, color: Colors.black38),
+            padding: const EdgeInsets.all(8),
+            child: Icon(Icons.arrow_back,
+                color: Theme.of(context).unselectedWidgetColor),
           ),
         ),
       ),
@@ -127,38 +143,57 @@ class SettingsState extends State<Settings> {
             style: NeumorphicStyle(
               depth: 7,
               intensity: 1,
-              shadowDarkColor: Colors.grey.shade300,
-              color: Colors.grey.shade100,
+              shadowLightColor: Theme.of(context).brightness == Brightness.light
+                  ? const NeumorphicStyle().shadowLightColor
+                  : grey800,
+              shadowDarkColor: Theme.of(context).brightness == Brightness.dark
+                  ? const NeumorphicStyle().shadowDarkColor
+                  : Theme.of(context).shadowColor,
+              color: Theme.of(context).brightness == Brightness.light
+                  ? grey200
+                  : grey800,
               boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(15)),
             ),
             child: ListTile(
-              title: Text('darkmode'.tr()),
-              trailing: NeumorphicSwitch(
-                value: _themeManager.themeMode == ThemeMode.dark,
-                onChanged: (bool value) {
-                  setState(() {
-                    _themeManager.toggleTheme(value);
-                  });
-                },
-                style: NeumorphicSwitchStyle(
-                  lightSource: LightSource.topLeft,
-                  thumbShape: NeumorphicShape.concave,
-                  trackDepth: 5,
-                  activeTrackColor: Colors.lightGreen,
-                  inactiveTrackColor: Colors.grey.shade300,
-                  activeThumbColor: Colors.grey.shade100,
-                  inactiveThumbColor: Colors.grey.shade200,
-                ),
-              ),
-            ),
+                title: Text('darkmode'.tr()),
+                trailing:
+                    Consumer<ThemeManager>(builder: (context, themeManager, _) {
+                  return NeumorphicSwitch(
+                    value: themeManager.themeMode == ThemeMode.dark,
+                    onChanged: (bool value) {
+                      setState(() {
+                        themeManager.toggleTheme(value);
+                      });
+                    },
+                    style: NeumorphicSwitchStyle(
+                      lightSource: LightSource.topLeft,
+                      thumbShape: NeumorphicShape.concave,
+                      trackDepth: 5,
+                      activeTrackColor: Colors.lightGreen,
+                      inactiveTrackColor: Theme.of(context).shadowColor,
+                      activeThumbColor:
+                          Theme.of(context).brightness == Brightness.light
+                              ? grey200
+                              : grey800,
+                      inactiveThumbColor: Theme.of(context).shadowColor,
+                    ),
+                  );
+                })),
           ),
           const SizedBox(height: 16),
           Neumorphic(
             style: NeumorphicStyle(
               depth: 7,
               intensity: 1,
-              shadowDarkColor: Colors.grey.shade300,
-              color: Colors.grey.shade100,
+              shadowLightColor: Theme.of(context).brightness == Brightness.light
+                  ? const NeumorphicStyle().shadowLightColor
+                  : grey800,
+              shadowDarkColor: Theme.of(context).brightness == Brightness.dark
+                  ? const NeumorphicStyle().shadowDarkColor
+                  : Theme.of(context).shadowColor,
+              color: Theme.of(context).brightness == Brightness.light
+                  ? grey200
+                  : grey800,
               boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(15)),
             ),
             child: ListTile(
@@ -196,8 +231,15 @@ class SettingsState extends State<Settings> {
             style: NeumorphicStyle(
               depth: 7,
               intensity: 1,
-              shadowDarkColor: Colors.grey.shade300,
-              color: Colors.grey.shade100,
+              shadowLightColor: Theme.of(context).brightness == Brightness.light
+                  ? const NeumorphicStyle().shadowLightColor
+                  : grey800,
+              shadowDarkColor: Theme.of(context).brightness == Brightness.dark
+                  ? const NeumorphicStyle().shadowDarkColor
+                  : Theme.of(context).shadowColor,
+              color: Theme.of(context).brightness == Brightness.light
+                  ? grey200
+                  : grey800,
               boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(15)),
             ),
             child: ListTile(
@@ -211,10 +253,12 @@ class SettingsState extends State<Settings> {
                 onChanged: (String? newValue) {
                   setState(() {
                     _selectedCurrency = newValue!;
-                    saveCurrencyToSharedPreferences("currency", _selectedCurrency);
+                    saveCurrencyToSharedPreferences(
+                        "currency", _selectedCurrency);
                   });
                 },
-                items: _currencies.map<DropdownMenuItem<String>>((String value) {
+                items:
+                    _currencies.map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
                     child: Text(value),

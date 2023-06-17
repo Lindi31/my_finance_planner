@@ -4,6 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tests/saving_tips.dart';
+import 'package:tests/theme/theme_constants.dart';
 import 'package:tests/transaction/transaction_dialog.dart';
 import 'package:tests/transaction/transaction.dart';
 import '../main.dart';
@@ -30,33 +31,39 @@ class AccountDetailPageState extends State<AccountDetailPage>
   List<Transaction> incomeTransactions = [];
   List<Transaction> expenseTransactions = [];
   List<ExpenseData> expenseData = [];
-  String _selectedCurrency="€";
+  String _selectedCurrency = "€";
 
   Future<String> getCurrencyFromSharedPreferences(String key) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.getString(key)=="Euro"){
-      _selectedCurrency="€";
+    if (prefs.getString(key) == "Euro") {
+      _selectedCurrency = "€";
     }
-    if (prefs.getString(key)=="Dollar"){
-      _selectedCurrency=r"$";
+    if (prefs.getString(key) == "Dollar") {
+      _selectedCurrency = r"$";
     }
-    if (prefs.getString(key)=="CHF"){
-      _selectedCurrency="CHF";
+    if (prefs.getString(key) == "CHF") {
+      _selectedCurrency = "CHF";
     }
 
     return prefs.getString(key) ?? 'Euro';
   }
+
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
-
     getCurrencyFromSharedPreferences("currency").then((value) {
-      setState(() {
-
-      });
+      setState(() {});
     });
+    loadMaxProgress();
     loadTransactions();
+  }
+
+  void loadMaxProgress() async {
+    double storedMaxProgress = await getMaxProgress();
+    setState(() {
+      maxProgress = storedMaxProgress;
+    });
   }
 
   @override
@@ -141,8 +148,24 @@ class AccountDetailPageState extends State<AccountDetailPage>
   final _budgetController = TextEditingController();
   double progress = 0;
 
-  double submitbudget() {
-    return progress = double.parse(_budgetController.text.trim());
+  double submitBudget() {
+    if (_budgetController.text.isNotEmpty) {
+      double budgetValue = double.parse(_budgetController.text);
+      SharedPreferences.getInstance().then((prefs) {
+        prefs.setDouble("maxProgress", budgetValue);
+      });
+      setState(() {
+        maxProgress = budgetValue;
+      });
+      return budgetValue;
+    }
+    return 0;
+  }
+
+  Future<double> getMaxProgress() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    double maxProgress = prefs.getDouble('maxProgress') ?? 1000;
+    return maxProgress;
   }
 
   @override
@@ -155,9 +178,9 @@ class AccountDetailPageState extends State<AccountDetailPage>
           Padding(
             padding: const EdgeInsets.only(right: 10.0),
             child: IconButton(
-              icon: const Icon(
+              icon: Icon(
                 Icons.info,
-                color: Colors.grey,
+                color: Theme.of(context).unselectedWidgetColor,
               ),
               onPressed: () {
                 showDialog(
@@ -171,11 +194,12 @@ class AccountDetailPageState extends State<AccountDetailPage>
         toolbarHeight: 80,
         title: Text(
           widget.account.name,
-          style: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Colors.black54,
-          ),
+          style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? Colors.white70
+                  : Colors.black87),
         ),
         centerTitle: true,
         shape: const RoundedRectangleBorder(
@@ -184,13 +208,12 @@ class AccountDetailPageState extends State<AccountDetailPage>
             bottomRight: Radius.circular(15),
           ),
         ),
-        shadowColor: Colors.grey.shade300,
         leading: Padding(
           padding: const EdgeInsets.only(left: 16.0),
           child: NeumorphicButton(
             onPressed: () {
-              Navigator.pop(context); // Zurück zur vorherigen Seite
-              Navigator.pushReplacement( // Neue Seite öffnen und vorherige Seite ersetzen
+              Navigator.pop(context);
+              Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => const HomePage()),
               );
@@ -199,11 +222,20 @@ class AccountDetailPageState extends State<AccountDetailPage>
               shape: NeumorphicShape.flat,
               boxShape: const NeumorphicBoxShape.circle(),
               depth: 6,
+              shadowLightColor: Theme.of(context).brightness == Brightness.light
+                  ? const NeumorphicStyle().shadowLightColor
+                  : Theme.of(context).shadowColor,
+              shadowDarkColor: Theme.of(context).brightness == Brightness.dark
+                  ? const NeumorphicStyle().shadowDarkColor
+                  : grey400,
+              color: Theme.of(context).brightness == Brightness.light
+                  ? grey200
+                  : grey800,
               intensity: 0.9,
-              color: Colors.grey.shade100,
             ),
-            padding: const EdgeInsets.all(10),
-            child: const Icon(Icons.arrow_back, color: Colors.black38),
+            padding: const EdgeInsets.all(8),
+            child: Icon(Icons.arrow_back,
+                color: Theme.of(context).unselectedWidgetColor),
           ),
         ),
       ),
@@ -211,12 +243,12 @@ class AccountDetailPageState extends State<AccountDetailPage>
         children: [
           TabBar(
             controller: _tabController,
-            labelColor: Colors.black,
+            labelColor: Theme.of(context).cardColor,
             labelStyle: const TextStyle(fontSize: 14),
-            unselectedLabelColor: Colors.black54,
+            unselectedLabelColor: Theme.of(context).unselectedWidgetColor,
             indicator: MaterialIndicator(
               height: 4,
-              color: Colors.black54,
+              color: Theme.of(context).unselectedWidgetColor,
               topLeftRadius: 8,
               topRightRadius: 8,
               horizontalPadding: 45,
@@ -249,16 +281,27 @@ class AccountDetailPageState extends State<AccountDetailPage>
                     Neumorphic(
                       margin: const EdgeInsets.all(14),
                       style: NeumorphicStyle(
-                        color: Colors.grey.shade100,
+                        shadowLightColor:
+                            Theme.of(context).brightness == Brightness.light
+                                ? const NeumorphicStyle().shadowLightColor
+                                : Theme.of(context).shadowColor,
+                        shadowDarkColor:
+                            Theme.of(context).brightness == Brightness.dark
+                                ? const NeumorphicStyle().shadowDarkColor
+                                : grey400,
+                        color: Theme.of(context).brightness == Brightness.light
+                            ? grey200
+                            : grey800,
                         boxShape: NeumorphicBoxShape.roundRect(
                             BorderRadius.circular(15)),
                         depth: -5,
                         intensity: 0.8,
                       ),
                       child: TextFormField(
+                        controller: _budgetController,
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
-                          labelText: 'enteramount'.tr(),
+                          labelText: 'enterbudget'.tr(),
                           contentPadding: const EdgeInsets.only(
                               left: 16, bottom: 8, top: 8),
                           border: InputBorder.none,
@@ -268,13 +311,25 @@ class AccountDetailPageState extends State<AccountDetailPage>
                     const SizedBox(height: 16),
                     NeumorphicButton(
                       onPressed: () {
-                        progress = submitbudget();
+                        setState(() {
+                          submitBudget();
+                        });
                       },
                       style: NeumorphicStyle(
                         boxShape: NeumorphicBoxShape.roundRect(
                           BorderRadius.circular(12),
                         ),
-                        color: Colors.grey.shade100,
+                        shadowLightColor:
+                            Theme.of(context).brightness == Brightness.light
+                                ? const NeumorphicStyle().shadowLightColor
+                                : Theme.of(context).shadowColor,
+                        shadowDarkColor:
+                            Theme.of(context).brightness == Brightness.dark
+                                ? const NeumorphicStyle().shadowDarkColor
+                                : grey400,
+                        color: Theme.of(context).brightness == Brightness.light
+                            ? grey200
+                            : grey800,
                         depth: 8,
                         intensity: 0.9,
                       ),
@@ -295,15 +350,23 @@ class AccountDetailPageState extends State<AccountDetailPage>
         style: NeumorphicStyle(
           depth: 8,
           intensity: 1,
-          shadowDarkColor: Colors.grey.shade400,
-          color: Colors.grey.shade100,
+          shadowLightColor: Theme.of(context).brightness == Brightness.light
+              ? const NeumorphicStyle().shadowLightColor
+              : Theme.of(context).shadowColor,
+          shadowDarkColor: Theme.of(context).brightness == Brightness.dark
+              ? const NeumorphicStyle().shadowDarkColor
+              : grey400,
+          color: Theme.of(context).brightness == Brightness.light
+              ? grey200
+              : grey800,
           boxShape: const NeumorphicBoxShape.circle(),
         ),
-        padding: const EdgeInsets.all(16),
-        child: const Icon(
+        child: Icon(
           Icons.add,
-          size: 40,
-          color: Colors.black12,
+          size: 60,
+          color: Theme.of(context).brightness == Brightness.light
+              ? Colors.black12
+              : Colors.white12,
         ),
       ),
     );
@@ -311,14 +374,20 @@ class AccountDetailPageState extends State<AccountDetailPage>
 
   final ValueNotifier<double> _valueNotifier = ValueNotifier(0);
 
+  double maxProgress = 500;
+
   Widget monthlybudgetplanner() {
     return CircularSeekBar(
       width: double.infinity,
       height: 300,
-      trackColor: Colors.black12,
-      progress: 500,
+      trackColor: Theme.of(context).brightness == Brightness.light
+          ? Colors.black12
+          : Colors.white12,
+      progress: calculateMonthlyExpensesTotal(),
       minProgress: 0,
-      maxProgress: 800,
+      maxProgress: calculateMonthlyExpensesTotal() > maxProgress
+          ? calculateMonthlyExpensesTotal()
+          : maxProgress,
       barWidth: 17,
       startAngle: 45,
       sweepAngle: 270,
@@ -338,10 +407,9 @@ class AccountDetailPageState extends State<AccountDetailPage>
       ],
       innerThumbRadius: 0,
       innerThumbStrokeWidth: 12,
-      innerThumbColor: Colors.white,
+      innerThumbColor: Theme.of(context).cardColor,
       outerThumbRadius: 0,
       outerThumbStrokeWidth: 15,
-      outerThumbColor: Colors.blueAccent,
       dashWidth: 1.5,
       dashGap: 1.9,
       animation: true,
@@ -350,24 +418,59 @@ class AccountDetailPageState extends State<AccountDetailPage>
       valueNotifier: _valueNotifier,
       child: Center(
         child: ValueListenableBuilder(
-            valueListenable: _valueNotifier,
-            builder: (_, double value, __) => Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      '${value.round()}$_selectedCurrency',
-                    ),
-                    Text(
-                      'progress'.tr(),
-                    ),
-                  ],
-                )),
+          valueListenable: _valueNotifier,
+          builder: (_, double value, __) {
+            final isMaxProgressReached = value >= maxProgress;
+            final textStyle = TextStyle(
+              fontSize: 15,
+              fontWeight:
+                  isMaxProgressReached ? FontWeight.w600 : FontWeight.w300,
+            );
+
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (isMaxProgressReached)
+                  Text(
+                    "budgetmax".tr(),
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).cardColor),
+                  )
+                else
+                  Text(
+                    '${value.round()}$_selectedCurrency',
+                    style: TextStyle(
+                        fontSize: 24, color: Theme.of(context).cardColor),
+                  ),
+                const SizedBox(
+                  height: 10,
+                ),
+                isMaxProgressReached
+                    ? Text('hint'.tr(),
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Theme.of(context).cardColor))
+                    : Text('progress'.tr(),
+                        style: TextStyle(color: Theme.of(context).cardColor)),
+                const SizedBox(height: 10),
+                isMaxProgressReached
+                    ? Container()
+                    : Text(
+                        'Budget: $maxProgress',
+                        style: textStyle,
+                      ),
+              ],
+            );
+          },
+        ),
       ),
     );
   }
 
   Widget _buildTransactionsList(List<Transaction> transactionsList) {
     return ListView.builder(
+      physics: const BouncingScrollPhysics(),
       itemCount: transactionsList.length,
       itemBuilder: (context, index) {
         return ListTile(
@@ -389,11 +492,25 @@ class AccountDetailPageState extends State<AccountDetailPage>
     );
   }
 
+  double calculateMonthlyExpensesTotal() {
+    double total = 0;
+    for (var transaction in expenseTransactions) {
+      String month = DateFormat('yyyy-MM').format(transaction.date);
+      if (month == DateFormat('yyyy-MM').format(DateTime.now())) {
+        total += transaction.amount;
+      }
+    }
+    return total;
+  }
+
   Widget _buildExpenseChart() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Card(
-        elevation: 4.0,
+        color: Theme.of(context).brightness == Brightness.light
+            ? grey400
+            : grey800,
+        elevation: 6.0,
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: MonthlyExpensesChart(data: expenseData),
