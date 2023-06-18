@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:circular_seek_bar/circular_seek_bar.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -469,27 +470,76 @@ class AccountDetailPageState extends State<AccountDetailPage>
   }
 
   Widget _buildTransactionsList(List<Transaction> transactionsList) {
-    return ListView.builder(
+
+    return ListView.separated(
       physics: const BouncingScrollPhysics(),
       itemCount: transactionsList.length,
       itemBuilder: (context, index) {
-        return ListTile(
-          title: Text(transactionsList[index].title),
-          subtitle: Text(transactionsList[index].title),
-          trailing: Text(
-            transactionsList[index].isExpense
-                ? '-$_selectedCurrency${transactionsList[index].amount.toStringAsFixed(2)}'
-                : '+$_selectedCurrency${transactionsList[index].amount.toStringAsFixed(2)}',
-            style: TextStyle(
-              color:
-                  transactionsList[index].isExpense ? Colors.red : Colors.green,
-              fontWeight: FontWeight.bold,
+        final transaction = transactionsList[index];
+        final formattedDate = DateFormat.yMMMMd().add_Hm().format(transaction.date);
+        return GestureDetector(
+          onLongPress: () =>
+              _showDeleteConfirmationDialog(transactionsList[index]),
+          child: ListTile(
+
+            title: Text(
+              transactionsList[index].title,
+              style: TextStyle(
+                  color: Theme.of(context).brightness == Brightness.dark
+                      ? Colors.white54
+                      : Colors.black87),
+            ),
+            subtitle:Text(
+              formattedDate,
+              style: TextStyle(
+                fontSize: 12,
+                color: Theme.of(context).brightness == Brightness.dark ? Colors.grey[600] : Colors.grey[400],
+              ),
+            ),
+            trailing: Text(
+              transactionsList[index].isExpense
+                  ? '-$_selectedCurrency${transactionsList[index].amount.toStringAsFixed(2)}'
+                  : '+$_selectedCurrency${transactionsList[index].amount.toStringAsFixed(2)}',
+              style: TextStyle(
+                color: transactionsList[index].isExpense
+                    ? Colors.red
+                    : Colors.green,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
-          onLongPress: () => deleteTransaction(transactionsList[index]),
         );
       },
+      separatorBuilder: (context, index) => Divider(
+        indent: MediaQuery.of(context).size.width * 0.03,
+        endIndent: MediaQuery.of(context).size.width * 0.03,
+        color: Colors.grey,
+        height: 0.05,
+      ),
     );
+  }
+
+  Future _showDeleteConfirmationDialog(Transaction transaction) {
+    return AwesomeDialog(
+      dialogBackgroundColor: Theme.of(context).brightness == Brightness.dark
+          ? Colors.grey[800]
+          : Colors.grey[200],
+      btnOkText: "Delete".tr(),
+      btnOkColor: Colors.red,
+      btnCancelColor: Theme.of(context).brightness == Brightness.dark
+          ? Colors.grey[500]
+          : Colors.grey[500],
+      context: context,
+      animType: AnimType.bottomSlide,
+      dialogType: DialogType.info,
+      title: 'deletetransaction'.tr(),
+      headerAnimationLoop: false,
+      desc: 'suretransaction'.tr(),
+      btnCancelOnPress: () {},
+      btnOkOnPress: () {
+        deleteTransaction(transaction);
+      },
+    ).show();
   }
 
   double calculateMonthlyExpensesTotal() {

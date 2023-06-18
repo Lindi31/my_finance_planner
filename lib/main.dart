@@ -149,7 +149,7 @@ class HomePageState extends State<HomePage> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: Padding(
-            padding: EdgeInsets.only(left: 5),
+            padding: const EdgeInsets.only(left: 5),
             child: Image.asset(
               'lib/assets/mfa_logo.png',
               width: 32,
@@ -207,9 +207,16 @@ class HomePageState extends State<HomePage> {
               return GestureDetector(
                 onLongPress: () {
                   AwesomeDialog(
+                    dialogBackgroundColor:
+                        Theme.of(context).brightness == Brightness.dark
+                            ? Colors.grey[800]
+                            : Colors.grey[200],
                     btnOkText: "Delete".tr(),
-                    btnOkColor: Colors.lightGreen,
-                    btnCancelColor: Theme.of(context).shadowColor,
+                    btnOkColor: Colors.red,
+                    btnCancelColor:
+                        Theme.of(context).brightness == Brightness.dark
+                            ? Colors.grey[500]
+                            : Colors.grey[500],
                     context: context,
                     animType: AnimType.bottomSlide,
                     dialogType: DialogType.info,

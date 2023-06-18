@@ -1,7 +1,7 @@
 {
   "title": "My Finance Planner",
   "delete": "Löschen",
-  "deleteaccount": "Account löschen",
+  "deleteaccount": "Account löschen?",
   "sure": "Sind Sie sicher, dass Sie dieses Konto löschen möchten?",
   "balance": "Bilanz",
   "addaccount": "Konto hinzufügen",
@@ -42,5 +42,7 @@
   "tip15": "Nutze kostenlose Online-Ressourcen für Weiterbildung und Hobbys.",
   "hint": "Spartipps gefällig? \nDrücke auf den Info-Button",
   "budgetmax": "Budget verbraucht!",
-  "enterbudget": "Budget eingeben"
+  "enterbudget": "Budget eingeben",
+  "deletetransaction":"Transaktion löschen?",
+  "suretransaction": "Sind Sie sicher, dass Sie die Transaktion löschen möchten?"
 }

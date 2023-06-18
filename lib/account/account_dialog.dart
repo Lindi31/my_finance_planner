@@ -46,9 +46,11 @@ class AddAccountDialogState extends State<AddAccountDialog> {
       ),
       title: Text(
         'addaccount'.tr(),
+        textAlign: TextAlign.center,
       ),
-      titleTextStyle: const TextStyle(
+      titleTextStyle: TextStyle(
         fontSize: 20,
+        color: Theme.of(context).brightness==Brightness.dark?Colors.white70:Colors.black87,
       ),
       content: Form(
         key: _formKey,
@@ -131,7 +133,6 @@ class AddAccountDialogState extends State<AddAccountDialog> {
       ),
       actions: [
         NeumorphicButton(
-          margin: const EdgeInsets.fromLTRB(0, 0, 4, 4),
           onPressed: () {
             Navigator.of(context).pop();
           },

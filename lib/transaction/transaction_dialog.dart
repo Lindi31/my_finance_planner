@@ -147,7 +147,7 @@ class AddTransactionDialogState extends State<AddTransactionDialog> {
                                 ? grey200
                                 : grey800,
                         selectedDepth: -10,
-                        unselectedDepth: 8),
+                        unselectedDepth: 6),
                     value: _isExpense,
                     onChanged: (value) {
                       setState(() {
@@ -155,7 +155,7 @@ class AddTransactionDialogState extends State<AddTransactionDialog> {
                       });
                     },
                   ),
-                  const SizedBox(width: 8),
+                  const SizedBox(width: 9),
                   Text(
                     'expense'.tr(),
                   ),
@@ -195,7 +195,6 @@ class AddTransactionDialogState extends State<AddTransactionDialog> {
           ),
         ),
         NeumorphicButton(
-          margin: const EdgeInsets.fromLTRB(0, 0, 4, 4),
           onPressed: _submitForm,
           style: NeumorphicStyle(
             shape: NeumorphicShape.concave,

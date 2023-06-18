@@ -1,7 +1,7 @@
 {
   "title": "My Finance Planner",
   "delete": "Delete",
-  "deleteaccount": "Delete account",
+  "deleteaccount": "Delete account?",
   "sure": "Are you sure you want to delete this account?",
   "balance": "Balance",
   "addaccount": "Add account",
@@ -42,5 +42,7 @@
   "tip15":"Use free online resources for continuing education and hobbies.",
   "hint": "Need saving tips? \nPress the info button",
   "budgetmax": "Budget spent!",
-  "enterbudget": "Enter budget"
+  "enterbudget": "Enter budget",
+  "deletetransaction":"Delete transaction?",
+  "suretransaction": "Are you sure you want to delete this transaction?"
 }
