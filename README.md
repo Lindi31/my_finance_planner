@@ -1,12 +1,12 @@
 # My Finance Planer
 
 My Finance Planer is a fantastic application that helps you manage your finances and provides money-saving tips. It offers an intuitive user interface and useful features to help you achieve your financial goals.<br>
-<table>
+<div align="center" style="margin: 0 auto;"><table>
     <tr>
         <td><p align="center"><img src="1.png" alt="1.png" height="820"></p></td>
         <td><p align="center"><img src="6.png" alt="1.png" height="820"></p></td>
     </tr>
-</table><br>
+</table></div><br>
 
 
 ## Features
