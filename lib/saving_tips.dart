@@ -83,7 +83,7 @@ class SavingsTipsDialog extends StatelessWidget {
                 initialPage: 0,
                 enableInfiniteScroll: true,
                 autoPlay: true,
-                autoPlayInterval: const Duration(seconds: 4),
+                autoPlayInterval: const Duration(seconds: 3),
                 autoPlayAnimationDuration: const Duration(milliseconds: 700),
                 autoPlayCurve: Curves.fastOutSlowIn,
                 pauseAutoPlayOnTouch: true,

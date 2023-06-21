@@ -458,7 +458,7 @@ class AccountDetailPageState extends State<AccountDetailPage>
                 isMaxProgressReached
                     ? Container()
                     : Text(
-                        'Budget: $maxProgress',
+                        'Budget: ${maxProgress.round()}$_selectedCurrency',
                         style: textStyle,
                       ),
               ],
@@ -475,15 +475,16 @@ class AccountDetailPageState extends State<AccountDetailPage>
       physics: const BouncingScrollPhysics(),
       itemCount: transactionsList.length,
       itemBuilder: (context, index) {
-        final transaction = transactionsList[index];
-        final formattedDate = DateFormat.yMMMMd().add_Hm().format(transaction.date);
+        final reversedIndex = transactionsList.length - 1 - index; // Berechnung des umgekehrten Index
+        final revtrans=transactionsList[reversedIndex];
+        final formattedDate = DateFormat.yMMMMd().add_Hm().format(revtrans.date);
         return GestureDetector(
           onLongPress: () =>
-              _showDeleteConfirmationDialog(transactionsList[index]),
+              _showDeleteConfirmationDialog(transactionsList[reversedIndex]),
           child: ListTile(
 
             title: Text(
-              transactionsList[index].title,
+              transactionsList[reversedIndex].title,
               style: TextStyle(
                   color: Theme.of(context).brightness == Brightness.dark
                       ? Colors.white54
@@ -497,11 +498,11 @@ class AccountDetailPageState extends State<AccountDetailPage>
               ),
             ),
             trailing: Text(
-              transactionsList[index].isExpense
-                  ? '-$_selectedCurrency${transactionsList[index].amount.toStringAsFixed(2)}'
-                  : '+$_selectedCurrency${transactionsList[index].amount.toStringAsFixed(2)}',
+              transactionsList[reversedIndex].isExpense
+                  ? '-$_selectedCurrency${transactionsList[reversedIndex].amount.toStringAsFixed(2)}'
+                  : '+$_selectedCurrency${transactionsList[reversedIndex].amount.toStringAsFixed(2)}',
               style: TextStyle(
-                color: transactionsList[index].isExpense
+                color: transactionsList[reversedIndex].isExpense
                     ? Colors.red
                     : Colors.green,
                 fontWeight: FontWeight.bold,
