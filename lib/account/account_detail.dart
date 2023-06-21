@@ -470,19 +470,20 @@ class AccountDetailPageState extends State<AccountDetailPage>
   }
 
   Widget _buildTransactionsList(List<Transaction> transactionsList) {
-
     return ListView.separated(
       physics: const BouncingScrollPhysics(),
       itemCount: transactionsList.length,
       itemBuilder: (context, index) {
-        final reversedIndex = transactionsList.length - 1 - index; // Berechnung des umgekehrten Index
-        final revtrans=transactionsList[reversedIndex];
-        final formattedDate = DateFormat.yMMMMd().add_Hm().format(revtrans.date);
+        final reversedIndex = transactionsList.length -
+            1 -
+            index; // Berechnung des umgekehrten Index
+        final revtrans = transactionsList[reversedIndex];
+        final formattedDate =
+            DateFormat.yMMMMd().add_Hm().format(revtrans.date);
         return GestureDetector(
           onLongPress: () =>
               _showDeleteConfirmationDialog(transactionsList[reversedIndex]),
           child: ListTile(
-
             title: Text(
               transactionsList[reversedIndex].title,
               style: TextStyle(
@@ -490,11 +491,13 @@ class AccountDetailPageState extends State<AccountDetailPage>
                       ? Colors.white54
                       : Colors.black87),
             ),
-            subtitle:Text(
+            subtitle: Text(
               formattedDate,
               style: TextStyle(
                 fontSize: 12,
-                color: Theme.of(context).brightness == Brightness.dark ? Colors.grey[600] : Colors.grey[400],
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.grey[600]
+                    : Colors.grey[400],
               ),
             ),
             trailing: Text(

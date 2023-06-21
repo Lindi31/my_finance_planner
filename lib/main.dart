@@ -71,7 +71,6 @@ class HomePageState extends State<HomePage> {
     if (prefs.getString(key) == "CHF") {
       _selectedCurrency = "CHF";
     }
-
     return prefs.getString(key) ?? 'Euro';
   }
 
@@ -100,7 +99,6 @@ class HomePageState extends State<HomePage> {
   Future<void> loadAccounts() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final accountList = prefs.getStringList('accounts') ?? [];
-
     setState(() {
       accounts = accountList
           .map((accountJson) => Account.fromJson(accountJson))

@@ -20,7 +20,6 @@ class SavingsTipsDialog extends StatelessWidget {
     'tip13'.tr(),
     'tip14'.tr(),
     'tip15'.tr(),
-
   ];
 
   SavingsTipsDialog({super.key});

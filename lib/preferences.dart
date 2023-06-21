@@ -20,7 +20,6 @@ class Settings extends StatefulWidget {
 class SettingsState extends State<Settings> {
   String _selectedLanguage = 'English';
   String _selectedCurrency = 'Euro';
-
   final List<String> _languages = ['English', 'Deutsch'];
   final List<String> _currencies = ['Euro', 'Dollar', 'CHF'];
 
@@ -81,7 +80,6 @@ class SettingsState extends State<Settings> {
   @override
   Widget build(BuildContext context) {
     checkForLanguage(context);
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,

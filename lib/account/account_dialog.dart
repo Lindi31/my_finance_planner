@@ -50,7 +50,9 @@ class AddAccountDialogState extends State<AddAccountDialog> {
       ),
       titleTextStyle: TextStyle(
         fontSize: 20,
-        color: Theme.of(context).brightness==Brightness.dark?Colors.white70:Colors.black87,
+        color: Theme.of(context).brightness == Brightness.dark
+            ? Colors.white70
+            : Colors.black87,
       ),
       content: Form(
         key: _formKey,
