@@ -38,13 +38,12 @@ My Finance Planer is a fantastic application that helps you manage your finances
 
 ## Contributors
 
-- Serdar Özteke - [Gitty Profile](https://gitty.informatik.hs-mannheim.de/1925809)
-- Arlind Isa - [Gitty Profile](https://gitty.informatik.hs-mannheim.de/1925670)
+- Arlind Isa  - [GitHub Profile](https://github.dcom/Lindi31)
 
-We welcome contributions from the community! If you have any suggestions for improvements or have found a bug, feel free to open a pull request or create an issue in our [Gitty repository](https://gitty.informatik.hs-mannheim.de/1925809/cpd_app_gruppe).
+We welcome contributions from the community! If you have any suggestions for improvements or have found a bug, feel free to open a pull request or create an issue in my [GitHub repository](https://github.com/Lindi31/my_finance_planner).
 
 ## License
 
-This project is licensed under the HSMA License. For more information, please see the [LICENSE](LICENSE) file.
+This project is licensed under the MIT License.
 
 © 2023 My Finance Planner. All rights reserved.
